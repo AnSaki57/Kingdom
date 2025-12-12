@@ -29,7 +29,7 @@ void TopCamera::Move() {
     }
 }
     
-bool TopCamera::isObjOnScreen(Vector2 objPosn) {
+bool TopCamera::isObjOnScreen(Vector2 objPosn) const {
     if  (
             objPosn.x - posn.x > GetScreenWidth()  || objPosn.x < posn.x ||
             objPosn.y - posn.y > GetScreenHeight() || objPosn.y < posn.y 

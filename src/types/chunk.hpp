@@ -18,5 +18,6 @@ public:
 
     Chunk(TileCreator tc, Vector2 chunkPosn);
 
+    Rectangle getPosn();
     void Draw(const TopCamera& camera);
 };

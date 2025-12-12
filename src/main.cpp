@@ -31,6 +31,7 @@ For a C++ project simply rename the file to .cpp and re-run the build script
 #include "types/mudtile.hpp"
 #include "types/player.hpp"
 #include <iostream>
+#include <chrono>
 
 int main () {
 	SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
@@ -65,9 +66,16 @@ int main () {
 		ClearBackground(BLACK);
 
 		// Draw here
+        auto start = std::chrono::high_resolution_clock::now();
 		grassChunk.Draw(camera);
 		mudChunk.Draw(camera);
 		player.Draw(camera);
+        auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double, std::milli> elapsed = end - start;
+
+        /* if (elapsed.count() > 2.0) { // If it takes more than 2ms
+            std::cout << "SLOW: " << elapsed.count() << "ms\n";
+        }*/
 		
 		// end the frame and get ready for the next one  (display frame, poll input, etc...)
 		EndDrawing();

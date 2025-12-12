@@ -6,5 +6,5 @@
 class MudTile : public Tile {
 public:
     using Tile::Tile;
-    void Draw(const TopCamera& camera);
+    void Draw(const TopCamera& camera) const;
 };

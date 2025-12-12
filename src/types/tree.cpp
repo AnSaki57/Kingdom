@@ -50,7 +50,7 @@ const Texture2D& Tree::getTexture() {
     return sprite;
 } 
 
-void Tree::Draw(TopCamera camera) {
+void Tree::Draw(const TopCamera& camera) {
     if (camera.isObjOnScreen(posn)) {
         DrawTexture(getTexture(), posn.x-camera.posn.x, posn.y-camera.posn.y, WHITE);
     }

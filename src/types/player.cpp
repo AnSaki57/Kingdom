@@ -13,6 +13,6 @@ Player::Player() {
     UnloadImage(imgsprite);
 }
 
-void Player::Draw(TopCamera) {
+void Player::Draw(const TopCamera&) {
     DrawTexture(sprite, posn.x, posn.y, WHITE);
 }

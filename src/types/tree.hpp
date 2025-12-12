@@ -10,5 +10,5 @@ public:
     Tree(Vector2 posn_);
     void SetPosn(Vector2 posn_);
     static const Texture2D& getTexture();
-    void Draw(TopCamera camera) override;
+    void Draw(const TopCamera& camera) override;
 };

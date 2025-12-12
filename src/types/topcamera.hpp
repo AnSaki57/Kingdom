@@ -13,5 +13,5 @@ public:
     TopCamera(const Vector2& camposn) : posn(camposn), speed(CAMERA_SPEED) {}
 
     void Move();
-    bool isObjOnScreen(Vector2 objPosn);
+    bool isObjOnScreen(Vector2 objPosn) const;
 };

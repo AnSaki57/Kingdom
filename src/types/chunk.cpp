@@ -10,8 +10,6 @@ Chunk::Chunk(TileCreator tc, Vector2 chunkPosn) {
     std::mt19937 generator(seed);
     std::uniform_int_distribution<int> distribution(1, 1000000);
     
-    // auto tree = std::make_unique<Tree>();
-
     tiles.resize(CHUNK_SIZE);
 
     for (size_t i = 0; i < CHUNK_SIZE; i++) {
@@ -22,13 +20,16 @@ Chunk::Chunk(TileCreator tc, Vector2 chunkPosn) {
             int randnum = distribution(generator); 
             if (randnum % 16 == 0) {
                 auto tree = std::make_unique<Tree>(tilePosn);
-                // tree->SetPosn(tilePosn);
                 tiles[i][j] = tc(tilePosn, std::move(tree));
             } else {
                 tiles[i][j] = tc(tilePosn, nullptr);
             }
         }
     }
+}
+
+Rectangle Chunk::getPosn() {
+    return {tiles[0][0]->getPosn().x, tiles[0][0]->getPosn().y, CHUNK_SIZE * TILE_SIZE, CHUNK_SIZE * TILE_SIZE};
 }
 
 void Chunk::Draw(const TopCamera& camera) {
