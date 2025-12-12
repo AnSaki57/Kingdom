@@ -1,0 +1,59 @@
+#include <iostream>
+#include <chrono>
+#include "tree.hpp"
+#include "../constants.hpp"
+#include "../../include/resource_dir.h"
+
+Texture2D Tree::sprite;
+bool Tree::isTextureLoaded = false;
+
+Tree::Tree() {
+    posn = {0,0};
+    hp = 100.0;
+    level = 1;
+
+    getTexture();   // Automatically initialises the sprite, if not initialised 
+}
+
+void Tree::SetPosn(Vector2 posn_) {
+    this->posn = posn_;
+}
+
+Tree::Tree(Vector2 posn_) : Tree() {
+    this->SetPosn(posn_);
+    std::cout << YELLOW_TEXT << "Tree relocated to (" << posn.x << ", " << posn.y << ")\n" << RESET_TEXT;
+}
+
+const Texture2D& Tree::getTexture() {
+    if (!isTextureLoaded) {
+        SearchAndSetResourceDir("assets");
+        Image imgsprite = LoadImage("Trees.jpg");
+
+        if (!IsImageValid(imgsprite)) {
+            std::cerr << "Tree img not found\n";
+        } else {
+            std::cout << YELLOW_TEXT << "Tree loaded successfully\n" << RESET_TEXT;
+        }
+        ImageCrop(&imgsprite, {100, 300, 300, 400});
+        ImageResize(&imgsprite, TILE_SIZE, TILE_SIZE);
+        // auto start = std::chrono::high_resolution_clock::now();
+        sprite = LoadTextureFromImage(imgsprite);
+        UnloadImage(imgsprite);
+        /* auto end = std::chrono::high_resolution_clock::now();
+        std::chrono::duration<double, std::milli> elapsed = end - start;
+
+        if (elapsed.count() > 2.0) { // If it takes more than 2ms
+            std::cout << "SLOW: " << elapsed.count() << "ms\n";
+        }*/
+
+        isTextureLoaded = true;
+    }
+
+    return sprite;
+} 
+
+void Tree::Draw(TopCamera camera) {
+    if (camera.isObjOnScreen(posn)) {
+        DrawTexture(getTexture(), posn.x-camera.posn.x, posn.y-camera.posn.y, WHITE);
+    }
+}
