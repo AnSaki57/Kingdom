@@ -2,7 +2,6 @@
 #include <chrono>
 #include "tree.hpp"
 #include "../constants.hpp"
-#include "../../include/resource_dir.h"
 
 Texture2D Tree::sprite;
 bool Tree::isTextureLoaded = false;
@@ -26,7 +25,6 @@ Tree::Tree(Vector2 posn_) : Tree() {
 
 const Texture2D& Tree::getTexture() {
     if (!isTextureLoaded) {
-        SearchAndSetResourceDir("assets");
         Image imgsprite = LoadImage("Trees.jpg");
 
         if (!IsImageValid(imgsprite)) {

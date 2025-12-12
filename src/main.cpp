@@ -29,6 +29,7 @@ For a C++ project simply rename the file to .cpp and re-run the build script
 #include "types/chunk.hpp"
 #include "types/grasstile.hpp"
 #include "types/mudtile.hpp"
+#include "types/player.hpp"
 #include <iostream>
 
 int main () {
@@ -52,6 +53,8 @@ int main () {
 	Chunk grassChunk(grassTileCreator, {200, 200});
 	Chunk mudChunk(mudTileCreator, {200 + CHUNK_SIZE * TILE_SIZE, 200 + CHUNK_SIZE * TILE_SIZE});
 
+	Player player;
+
 	// game loop
 	while (!WindowShouldClose()) {
 		// Events
@@ -64,6 +67,7 @@ int main () {
 		// Draw here
 		grassChunk.Draw(camera);
 		mudChunk.Draw(camera);
+		player.Draw(camera);
 		
 		// end the frame and get ready for the next one  (display frame, poll input, etc...)
 		EndDrawing();
