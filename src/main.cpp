@@ -1,9 +1,6 @@
+// Note: this file has been modified from the original Raylib source code, as mentioned in the 
+// comment block below.
 /*
-Raylib example file.
-This is an example main file for a simple raylib project.
-Use this as a starting point or replace it with your code.
-
-For a C++ project simply rename the file to .cpp and re-run the build script 
 
 -- Copyright (c) 2020-2024 Jeffery Myers
 --
@@ -26,10 +23,8 @@ For a C++ project simply rename the file to .cpp and re-run the build script
 
 #include "raylib.h"
 #include "resource_dir.h"	// utility header for SearchAndSetResourceDir
-#include "types/chunk.hpp"
-#include "types/grasstile.hpp"
-#include "types/mudtile.hpp"
 #include "types/player.hpp"
+#include "types/worldMap.hpp"
 #include <iostream>
 #include <chrono>
 
@@ -44,41 +39,29 @@ int main () {
 
 	TopCamera camera({0,0});
 
-	Chunk::TileCreator grassTileCreator = [](Vector2 posn, std::unique_ptr<StationaryEntity> tileEntity_) {
-		return std::make_unique<GrassTile>(posn, std::move(tileEntity_));
-	};
-	Chunk::TileCreator mudTileCreator = [](Vector2 posn, std::unique_ptr<StationaryEntity> tileEntity_) {
-		return std::make_unique<MudTile>(posn, std::move(tileEntity_));
-	};
-
-	Chunk grassChunk(grassTileCreator, {200, 200});
-	Chunk mudChunk(mudTileCreator, {200 + CHUNK_SIZE * TILE_SIZE, 200 + CHUNK_SIZE * TILE_SIZE});
-
+	WorldMap worldMap;
 	Player player;
 
 	// game loop
+	int frameCount = 0;
 	while (!WindowShouldClose()) {
 		// Events
 		camera.Move();
+		if (frameCount % (FPS * 3) == 0) {
+			worldMap.GenerateChunks(camera);
+		}
 
 		// drawing
 		BeginDrawing();
 		ClearBackground(BLACK);
 
 		// Draw here
-        auto start = std::chrono::high_resolution_clock::now();
-		grassChunk.Draw(camera);
-		mudChunk.Draw(camera);
+		worldMap.Draw(camera);
 		player.Draw(camera);
-        auto end = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double, std::milli> elapsed = end - start;
 
-        /* if (elapsed.count() > 2.0) { // If it takes more than 2ms
-            std::cout << "SLOW: " << elapsed.count() << "ms\n";
-        }*/
-		
 		// end the frame and get ready for the next one  (display frame, poll input, etc...)
 		EndDrawing();
+		frameCount++;
 	}
 
 	// cleanup

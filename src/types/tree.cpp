@@ -34,15 +34,8 @@ const Texture2D& Tree::getTexture() {
         }
         ImageCrop(&imgsprite, {100, 300, 300, 400});
         ImageResize(&imgsprite, TILE_SIZE, TILE_SIZE);
-        // auto start = std::chrono::high_resolution_clock::now();
         sprite = LoadTextureFromImage(imgsprite);
         UnloadImage(imgsprite);
-        /* auto end = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double, std::milli> elapsed = end - start;
-
-        if (elapsed.count() > 2.0) { // If it takes more than 2ms
-            std::cout << "SLOW: " << elapsed.count() << "ms\n";
-        }*/
 
         isTextureLoaded = true;
     }
