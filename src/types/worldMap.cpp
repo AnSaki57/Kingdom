@@ -6,7 +6,9 @@
 #include <cmath>
 #include <algorithm>
 
-WorldMap::WorldMap() {
+WorldMap::WorldMap() {}
+
+void WorldMap::Init() {
     grassTileCreator = [](Vector2 posn, std::unique_ptr<StationaryEntity> tileEntity_) {
         return std::make_unique<GrassTile>(posn, std::move(tileEntity_));
     };
@@ -19,15 +21,15 @@ void WorldMap::GenerateChunks(const TopCamera& camera) {
     const double chunkWorldSize = CHUNK_SIZE * TILE_SIZE;
 
     Vector2 currGridPosn = {
-        std::floor(camera.posn.x / chunkWorldSize) * chunkWorldSize,
-        std::floor(camera.posn.y / chunkWorldSize) * chunkWorldSize
+        float(std::floor(camera.posn.x / chunkWorldSize) * chunkWorldSize),
+        float(std::floor(camera.posn.y / chunkWorldSize) * chunkWorldSize)
     };
 
     for (int i = -1; i <= 1; i++) {
         for (int j = -1; j <= 1; j++) {
             Vector2 targetPosn = {
-                currGridPosn.x + i * chunkWorldSize,
-                currGridPosn.y + j * chunkWorldSize
+                float(currGridPosn.x + i * chunkWorldSize),
+                float(currGridPosn.y + j * chunkWorldSize)
             };
 
             bool chunkExists = false;

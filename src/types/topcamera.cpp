@@ -1,6 +1,13 @@
 #include "topcamera.hpp"
 #define ONE_BY_ROOT2 0.707
 
+TopCamera::TopCamera() {}
+
+void TopCamera::Init() {
+    posn = {0,0};
+    speed = CAMERA_SPEED;
+}
+
 void TopCamera::Move() {
     if (IsKeyDown(KEY_UP)) {
         if (IsKeyDown(KEY_LEFT)) {

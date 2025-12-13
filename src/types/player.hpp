@@ -6,5 +6,6 @@ class Player : public MobileEntity {
 
 public:
     Player();
-    void Draw(const TopCamera&) override;
+    void Init();
+    void Draw(const TopCamera&) const override;
 };

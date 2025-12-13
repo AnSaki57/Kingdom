@@ -21,51 +21,10 @@
 
 */
 
-#include "raylib.h"
-#include "resource_dir.h"	// utility header for SearchAndSetResourceDir
-#include "types/player.hpp"
-#include "types/worldMap.hpp"
-#include <iostream>
-#include <chrono>
+#include "types/game.hpp"
 
 int main () {
-	SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
-	InitWindow(1600, 900, "Kingdom v0.1");
-	ToggleBorderlessWindowed();
-	SearchAndSetResourceDir("assets");
-
-	constexpr int FPS = 40;
-	SetTargetFPS(FPS);
-
-	TopCamera camera({0,0});
-
-	WorldMap worldMap;
-	Player player;
-
-	// game loop
-	int frameCount = 0;
-	while (!WindowShouldClose()) {
-		// Events
-		camera.Move();
-		if (frameCount % (FPS * 3) == 0) {
-			worldMap.GenerateChunks(camera);
-		}
-
-		// drawing
-		BeginDrawing();
-		ClearBackground(BLACK);
-
-		// Draw here
-		worldMap.Draw(camera);
-		player.Draw(camera);
-
-		// end the frame and get ready for the next one  (display frame, poll input, etc...)
-		EndDrawing();
-		frameCount++;
-	}
-
-	// cleanup
-
-	CloseWindow();
+	Game game;
+	game.Run();
 	return 0;
 }

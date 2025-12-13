@@ -1,6 +1,8 @@
 #include "player.hpp"
 
-Player::Player() {
+Player::Player() {}
+
+void Player::Init() {
     hp = 100;
     level = 1;
     posn = {float(GetMonitorWidth(GetCurrentMonitor()))/2, float(GetMonitorHeight(GetCurrentMonitor()))/2};
@@ -13,6 +15,6 @@ Player::Player() {
     UnloadImage(imgsprite);
 }
 
-void Player::Draw(const TopCamera&) {
+void Player::Draw(const TopCamera&) const {
     DrawTexture(sprite, posn.x, posn.y, WHITE);
 }

@@ -10,6 +10,6 @@ protected:
     int level;
 
 public:
-    virtual void Draw(const TopCamera& camera) = 0;
+    virtual void Draw(const TopCamera& camera) const = 0;
     virtual ~Entity() = default;
 };

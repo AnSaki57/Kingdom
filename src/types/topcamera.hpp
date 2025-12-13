@@ -10,7 +10,8 @@ public:
     double speed;
     double zoom;    // For later
 
-    TopCamera(const Vector2& camposn) : posn(camposn), speed(CAMERA_SPEED) {}
+    TopCamera();
+    void Init();
 
     void Move();
     bool isObjOnScreen(Vector2 objPosn) const;

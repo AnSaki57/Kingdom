@@ -14,6 +14,7 @@ class WorldMap {
 
 public:
     WorldMap();
+    void Init();
 
     void GenerateChunks(const TopCamera& camera);
     void Draw(const TopCamera& camera) const;
