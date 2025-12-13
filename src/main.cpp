@@ -26,9 +26,10 @@ For a C++ project simply rename the file to .cpp and re-run the build script
 
 #include "raylib.h"
 #include "resource_dir.h"	// utility header for SearchAndSetResourceDir
-#include "types/chunk.hpp"
-#include "types/grasstile.hpp"
-#include "types/mudtile.hpp"
+// #include "types/chunk.hpp"
+// #include "types/grasstile.hpp"
+// #include "types/mudtile.hpp"
+#include "types/worldMap.hpp"
 #include "types/player.hpp"
 #include <iostream>
 #include <chrono>
@@ -44,7 +45,7 @@ int main () {
 
 	TopCamera camera({0,0});
 
-	Chunk::TileCreator grassTileCreator = [](Vector2 posn, std::unique_ptr<StationaryEntity> tileEntity_) {
+	/*Chunk::TileCreator grassTileCreator = [](Vector2 posn, std::unique_ptr<StationaryEntity> tileEntity_) {
 		return std::make_unique<GrassTile>(posn, std::move(tileEntity_));
 	};
 	Chunk::TileCreator mudTileCreator = [](Vector2 posn, std::unique_ptr<StationaryEntity> tileEntity_) {
@@ -52,26 +53,32 @@ int main () {
 	};
 
 	Chunk grassChunk(grassTileCreator, {200, 200});
-	Chunk mudChunk(mudTileCreator, {200 + CHUNK_SIZE * TILE_SIZE, 200 + CHUNK_SIZE * TILE_SIZE});
+	Chunk mudChunk(mudTileCreator, {200 + CHUNK_SIZE * TILE_SIZE, 200 + CHUNK_SIZE * TILE_SIZE});*/
 
+	WorldMap worldMap;
 	Player player;
 
 	// game loop
+	int frame = 0;
 	while (!WindowShouldClose()) {
 		// Events
 		camera.Move();
+		if (frame % (FPS * 5) == 0) {
+			worldMap.GenerateChunks(camera);
+		}
 
 		// drawing
 		BeginDrawing();
 		ClearBackground(BLACK);
 
 		// Draw here
-        auto start = std::chrono::high_resolution_clock::now();
-		grassChunk.Draw(camera);
-		mudChunk.Draw(camera);
+        // auto start = std::chrono::high_resolution_clock::now();
+		// grassChunk.Draw(camera);
+		// mudChunk.Draw(camera);
 		player.Draw(camera);
-        auto end = std::chrono::high_resolution_clock::now();
-        std::chrono::duration<double, std::milli> elapsed = end - start;
+		worldMap.Draw(camera);
+        // auto end = std::chrono::high_resolution_clock::now();
+        // std::chrono::duration<double, std::milli> elapsed = end - start;
 
         /* if (elapsed.count() > 2.0) { // If it takes more than 2ms
             std::cout << "SLOW: " << elapsed.count() << "ms\n";
@@ -79,6 +86,7 @@ int main () {
 		
 		// end the frame and get ready for the next one  (display frame, poll input, etc...)
 		EndDrawing();
+		frame++;
 	}
 
 	// cleanup

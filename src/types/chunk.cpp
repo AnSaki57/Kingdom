@@ -5,6 +5,22 @@
 #include <random>
 #include <chrono>
 
+Chunk::~Chunk() = default;
+//Chunk::Chunk(Chunk&& other) = default;
+//Chunk& Chunk::operator=(Chunk&& other) = default;
+Chunk::Chunk(Chunk&& other) 
+    : tiles(std::move(other.tiles)) 
+{
+}
+
+Chunk& Chunk::operator=(Chunk&& other) {
+    if (this != &other) {
+        tiles = std::move(other.tiles); 
+    }
+    return *this;
+}
+
+
 Chunk::Chunk(TileCreator tc, Vector2 chunkPosn) {
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     std::mt19937 generator(seed);
@@ -28,11 +44,12 @@ Chunk::Chunk(TileCreator tc, Vector2 chunkPosn) {
     }
 }
 
-Rectangle Chunk::getPosn() {
+
+Rectangle Chunk::getPosn() const {
     return {tiles[0][0]->getPosn().x, tiles[0][0]->getPosn().y, CHUNK_SIZE * TILE_SIZE, CHUNK_SIZE * TILE_SIZE};
 }
 
-void Chunk::Draw(const TopCamera& camera) {
+void Chunk::Draw(const TopCamera& camera) const {
     for (size_t i = 0; i < CHUNK_SIZE; i++) {
         for (size_t j = 0; j < CHUNK_SIZE; j++) {
             tiles[i][j]->Draw(camera);
