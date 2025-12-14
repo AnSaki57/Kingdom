@@ -5,5 +5,5 @@
 
 class StationaryEntity : public Entity {
 public:
-    virtual void SetPosn(Vector2 posn_) = 0;
+    // As of now, nothing else to implement
 };

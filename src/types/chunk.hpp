@@ -1,5 +1,4 @@
 #include "raylib.h"
-#include <iostream>
 #include <vector>
 #include <functional>
 #include <memory>

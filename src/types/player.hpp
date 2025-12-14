@@ -1,4 +1,3 @@
-#include "raylib.h"
 #include "mobileEntity.hpp"
 
 class Player : public MobileEntity {

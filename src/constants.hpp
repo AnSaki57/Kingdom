@@ -1,9 +1,10 @@
 #pragma once
 
+// #include "raylib.h"
 #include <string>
 
 // Fill in with useful game constants
-#define SCALING_FACTOR float(GetMonitorWidth(GetCurrentMonitor()) / 1600)
+#define SCALING_FACTOR float(/*GetMonitorWidth(GetCurrentMonitor()) / 1600*/2.4)
 #define TILE_SIZE 40 * SCALING_FACTOR
 #define TILE_BORDER_SIZE 2 * SCALING_FACTOR
 

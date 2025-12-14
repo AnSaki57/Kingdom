@@ -1,5 +1,8 @@
 #include "game.hpp"
 #include "resource_dir.h"
+#include "tree.hpp"
+#include <iostream>
+#include <thread>
 
 Game::Game() {
 	SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
@@ -7,6 +10,8 @@ Game::Game() {
 	ToggleBorderlessWindowed();
 
 	SearchAndSetResourceDir("assets");
+
+    Tree::LoadSprite();
 
     worldMap.Init();
     player.Init();
@@ -27,9 +32,7 @@ void Game::HandleEvents() {
 }
 
 void Game::Update() {
-    if (frameCount % (fps * 3) == 0) {
-        worldMap.GenerateChunks(camera);
-    }
+    worldMap.GenerateChunks(camera);
 }
 
 void Game::Draw() {
@@ -49,6 +52,5 @@ void Game::Run() {
         Update();
         Draw();
         frameCount++;
-        std::cout << frameCount << "," << camera.posn.y << " ";
     }
 }
