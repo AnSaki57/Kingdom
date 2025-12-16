@@ -9,8 +9,14 @@
 #include <vector>
 #include <iostream>
 
+/**
+ * @brief   Default initialiser for the class
+*/
 WorldMap::WorldMap() {}
 
+/**
+ * @brief   Creates the Tile creation lambdas for the underlying Chunk class
+*/
 void WorldMap::Init() {
     grassTileCreator = [](Vector2 posn, std::unique_ptr<StationaryEntity> tileEntity_) {
         return std::make_unique<GrassTile>(posn, std::move(tileEntity_));
@@ -20,6 +26,11 @@ void WorldMap::Init() {
     };
 }
 
+/**
+ * @brief   Automatically generates Chunks around the place where the camera is focusing on, if those Chunks don't exist already
+ * 
+ * @param camera    Context provider for where to generate Chunks
+*/
 void WorldMap::GenerateChunks(const TopCamera& camera) {
     const double chunkWorldSize = CHUNK_SIZE * TILE_SIZE;
 
@@ -73,6 +84,11 @@ void WorldMap::GenerateChunks(const TopCamera& camera) {
     }
 }
 
+/**
+ * @brief Calls Draw on each Chunk in mapChunks; whether to draw or not is decided at the Chunk-level
+ * 
+ * @param camera    Camera context to pass down to each Chunk
+*/
 void WorldMap::Draw(const TopCamera& camera) const {
     for (const auto& mapChunk : mapChunks) {
         mapChunk->Draw(camera);

@@ -9,6 +9,12 @@ Chunk::~Chunk() = default;
 Chunk::Chunk(Chunk&&) noexcept = default;
 Chunk& Chunk::operator=(Chunk&&) noexcept = default;
 
+/**
+ * @brief           Creates a Chunk based on the Tile type that the Tile creator function passes on, randomly deciding on whether or not to add a Tree to the Tile
+ * 
+ * @param tc        Tile Creation function that allows the creation of either grass or mud Tile types
+ * @param chunkPosn Position on the screen where the Chunk is to be placed
+*/
 Chunk::Chunk(TileCreator tc, Vector2 chunkPosn) : posn(chunkPosn) {
     unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
     std::mt19937 generator(seed);
@@ -32,10 +38,20 @@ Chunk::Chunk(TileCreator tc, Vector2 chunkPosn) : posn(chunkPosn) {
     }
 }
 
+/**
+ * @brief   Getter for Chunk size and posn
+ * 
+ * @return  Chunk posn, and size in pixels
+*/
 Rectangle Chunk::getPosn() const {
     return {posn.x, posn.y, CHUNK_SIZE * TILE_SIZE, CHUNK_SIZE * TILE_SIZE};
 }
 
+/**
+ * @brief           Draws each Tile in the Chunk (if it exists)
+ * 
+ * @param camera    Provides drawing context for the underlying Tile class
+*/
 void Chunk::Draw(const TopCamera& camera) const {
     for (size_t i = 0; i < CHUNK_SIZE; i++) {
         for (size_t j = 0; j < CHUNK_SIZE; j++) {

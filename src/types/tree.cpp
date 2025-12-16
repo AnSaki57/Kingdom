@@ -6,12 +6,18 @@
 Texture2D Tree::sprite;
 bool Tree::isTextureLoaded = false;
 
+/**
+ * @brief       Initialiser for a Tree object, starting off with beginner-level hp
+ * 
+ * @param posn_ Position on the map to draw the Tree
+*/
 Tree::Tree(Vector2 posn_) {
     posn = posn_;
-    hp = 100.0;
-    level = 1;
 }
 
+/**
+ * @brief   Texture loader for the Tree class, to be called once before the game begins
+*/
 void Tree::LoadSprite() {
     if (!isTextureLoaded) {
         Image imgsprite = LoadImage("Trees.jpg");
@@ -30,10 +36,21 @@ void Tree::LoadSprite() {
     }
 }
 
+/**
+ * @brief   Texture unloader for the Tree class, to be called once after the game ends
+*/
 void Tree::UnloadSprite() {
-    UnloadTexture(sprite);
+    if (isTextureLoaded) {
+        UnloadTexture(sprite);
+        isTextureLoaded = false;
+    }
 }
 
+/**
+ * @brief           Draws the Tree texture (sprite) on the screen
+ * 
+ * @param camera    Context for drawing the texture on the map
+*/
 void Tree::Draw(const TopCamera& camera) const {
     if (camera.isObjOnScreen(posn)) {
         DrawTexture(sprite, posn.x-camera.posn.x, posn.y-camera.posn.y, WHITE);

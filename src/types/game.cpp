@@ -5,6 +5,9 @@
 #include <iostream>
 #include <thread>
 
+/**
+ * @brief   Initialises the Raylib window context and the elements of the game
+*/
 Game::Game() {
 	SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
 	InitWindow(1600, 900, "Kingdom v0.1");
@@ -12,7 +15,7 @@ Game::Game() {
 
 	SearchAndSetResourceDir("assets");
 
-    Tree::LoadSprite();
+    Tree::LoadSprite();     // Initialises static sprite of Tree class used by all members
 
     worldMap.Init();
     player.Init();
@@ -23,19 +26,31 @@ Game::Game() {
     frameCount = 0;
 }
 
+/**
+ * @brief   Destroys the Raylib context
+*/
 Game::~Game() {
+    Tree::UnloadSprite();
     CloseWindow();
 }
 
-
+/**
+ * @brief   Takes in key/mouse presses and reacts accordingly
+*/
 void Game::HandleEvents() {
     camera.Move();
 }
 
+/**
+ * @brief   Executes computations in a single frame
+*/
 void Game::Update() {
     worldMap.GenerateChunks(camera);
 }
 
+/**
+ * @brief   Encapsulates the overall drawing context for Raylib, calls Draw for members as well
+*/
 void Game::Draw() {
     BeginDrawing();
     ClearBackground(BLACK);
@@ -46,7 +61,9 @@ void Game::Draw() {
     EndDrawing();
 }
 
-
+/**
+ * @brief   Contains the overall game loop
+*/
 void Game::Run() {
     while (!WindowShouldClose()) {
         HandleEvents();
