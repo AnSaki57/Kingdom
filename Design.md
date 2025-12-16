@@ -50,5 +50,5 @@
 8. Music & sound fx
 
 ## Lines of code
-- No comments:     ~580
-- With comments:    787
+- No comments, no whitespaces:  529 (using `cloc src/`)
+- With comments/whitespaces:    887

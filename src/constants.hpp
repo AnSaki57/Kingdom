@@ -4,7 +4,9 @@
 #include <string>
 
 // Fill in with useful game constants
-#define SCALING_FACTOR float(/*GetMonitorWidth(GetCurrentMonitor()) / 1600*/2.4)
+#define DEFAULT_MONITOR_WIDTH 3840
+#define DEFAULT_MONITOR_HEIGHT 2160
+#define SCALING_FACTOR float(GetScreenWidth()/1600.0)
 #define TILE_SIZE 40 * SCALING_FACTOR
 #define TILE_BORDER_SIZE 0.8 * SCALING_FACTOR
 
