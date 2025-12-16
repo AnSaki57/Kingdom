@@ -39,4 +39,16 @@
 - MobileEntity
     - <- Player
 
-## Design rationale
+## Future ideas
+1. Resources, inventory system
+2. Mining and harvesting, more stationaryEntities
+3. Buildings
+4. User profiles
+5. Comprehensive debugging and error handling
+6. Collisions
+7. Weapons, enemies, and attacking
+8. Music & sound fx
+
+## Lines of code
+- No comments:     ~580
+- With comments:    787

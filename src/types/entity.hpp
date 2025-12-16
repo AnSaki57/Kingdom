@@ -4,6 +4,9 @@
 
 class TopCamera;
 
+/**
+ * Represents a generic entity on the map
+ */
 class Entity{
 protected:
     Vector2 posn;

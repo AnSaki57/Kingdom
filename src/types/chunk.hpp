@@ -11,6 +11,13 @@ class Tile;
 class TopCamera;
 class StationaryEntity;
 
+/**
+ * A class to hold a 2D vector of CHUNK_SIZE size of Tiles
+ * 
+ * Responsibilities:
+ *  - Owns the Tiles in it
+ *  - Must initialise the Tiles under it with the appropriate type
+ */
 class Chunk {
     std::vector<std::vector<std::unique_ptr<Tile>>> tiles;
     Vector2 posn;

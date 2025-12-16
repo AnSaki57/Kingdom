@@ -6,6 +6,12 @@
 class TopCamera;
 class StationaryEntity;
 
+/**
+ * Represents a generic tile that can hold a StationaryEntity on it
+ * 
+ * Responsibilities:
+ *  - Owns the underlying StationaryEntity object
+ */
 class Tile {
 protected:
     Vector2 posn;

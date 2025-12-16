@@ -1,15 +1,15 @@
 #include "tile.hpp"
 
-#define GREEN_ {0, 210, 0, 255}
-#define LIGHT_GREEN_ {120, 230, 120, 255}
+#define SANDY_YELLOW_ {220, 220, 150, 255}
+#define LIGHT_SANDY_YELLOW_ {235, 235, 200, 255}
 
 /**
- * Represents a Tile of grass type
+ * Represents a Tile of sand type (golden yellow in colour)
  * 
  * Responsibilities:
  *  - Concrete class; must draw itself using Raylib functions
  */
-class GrassTile : public Tile {
+class SandTile : public Tile {
 public:
     using Tile::Tile;
     void Draw(const TopCamera& camera) const;

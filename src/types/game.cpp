@@ -11,11 +11,11 @@
 Game::Game() {
 	SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
 	InitWindow(1600, 900, "Kingdom v0.1");
-	ToggleBorderlessWindowed();
+	ToggleBorderlessWindowed(); // Makes the window full-screen
 
 	SearchAndSetResourceDir("assets");
 
-    Tree::LoadSprite();     // Initialises static sprite of Tree class used by all members
+    Tree::LoadSprite();         // Initialises static sprite of Tree class used by all members
 
     worldMap.Init();
     player.Init();
@@ -38,7 +38,7 @@ Game::~Game() {
  * @brief   Takes in key/mouse presses and reacts accordingly
 */
 void Game::HandleEvents() {
-    camera.Move();
+    camera.MotionCapture();
 }
 
 /**

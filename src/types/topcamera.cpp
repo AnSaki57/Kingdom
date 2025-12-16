@@ -15,34 +15,38 @@ void TopCamera::Init() {
 }
 
 /**
- * @brief   Motion key capture for moving the camera around
+ * @brief   Captures movement keys for moving the camera around
 */
-void TopCamera::Move() {
+void TopCamera::MotionCapture() {
+    Vector2 newPosn = posn;
+
     if (IsKeyDown(KEY_UP)) {
         if (IsKeyDown(KEY_LEFT)) {
-            posn.y-=speed * ONE_BY_ROOT2;
-            posn.x-=speed * ONE_BY_ROOT2;
+            newPosn.y-=speed * ONE_BY_ROOT2;
+            newPosn.x-=speed * ONE_BY_ROOT2;
         } else if (IsKeyDown(KEY_RIGHT)) {
-            posn.y-=speed * ONE_BY_ROOT2;
-            posn.x+=speed * ONE_BY_ROOT2;
+            newPosn.y-=speed * ONE_BY_ROOT2;
+            newPosn.x+=speed * ONE_BY_ROOT2;
         } else {
-            posn.y-=speed;
+            newPosn.y-=speed;
         }
     } else if (IsKeyDown(KEY_DOWN)) {
         if (IsKeyDown(KEY_LEFT)) {
-            posn.y+=speed * ONE_BY_ROOT2;
-            posn.x-=speed * ONE_BY_ROOT2;
+            newPosn.y+=speed * ONE_BY_ROOT2;
+            newPosn.x-=speed * ONE_BY_ROOT2;
         } else if (IsKeyDown(KEY_RIGHT)) {
-            posn.y+=speed * ONE_BY_ROOT2;
-            posn.x+=speed * ONE_BY_ROOT2;
+            newPosn.y+=speed * ONE_BY_ROOT2;
+            newPosn.x+=speed * ONE_BY_ROOT2;
         } else {
-            posn.y+=speed;
+            newPosn.y+=speed;
         }
     } else if (IsKeyDown(KEY_LEFT)) {
-        posn.x-=speed;
+        newPosn.x-=speed;
     } else if (IsKeyDown(KEY_RIGHT)) {
-        posn.x+=speed;
+        newPosn.x+=speed;
     }
+
+    posn = newPosn;
 }
     
 /**
