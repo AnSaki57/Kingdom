@@ -1,7 +1,8 @@
 #pragma once
 
 #include "raylib.h"
-#include "topcamera.hpp"
+
+class TopCamera;
 
 class Entity{
 protected:

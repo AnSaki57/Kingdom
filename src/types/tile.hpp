@@ -2,9 +2,9 @@
 
 #include <memory>
 #include "raylib.h"
-#include "topcamera.hpp"
-#include "stationaryEntity.hpp"
-#include "../constants.hpp"
+
+class TopCamera;
+class StationaryEntity;
 
 class Tile {
 protected:
@@ -14,10 +14,11 @@ protected:
     std::unique_ptr<StationaryEntity> tileEntity;
 
 public:    
-    Tile(Vector2 posn_, float size_, float borderSize_, std::unique_ptr<StationaryEntity> tileEntity_) : posn(posn_), size(size_), borderSize(borderSize_), tileEntity(std::move(tileEntity_)) {}
-    Tile(Vector2 posn_, std::unique_ptr<StationaryEntity> tileEntity_) : posn(posn_), size(TILE_SIZE), borderSize(TILE_BORDER_SIZE), tileEntity(std::move(tileEntity_)) {}
+    Tile(Vector2 posn_, float size_, float borderSize_, std::unique_ptr<StationaryEntity> tileEntity_);
+    Tile(Vector2 posn_, std::unique_ptr<StationaryEntity> tileEntity_);
     
     Vector2 getPosn() const;
+    Rectangle getBounds() const;
     virtual void Draw(const TopCamera& camera) const = 0;
     virtual ~Tile() = default;
 };

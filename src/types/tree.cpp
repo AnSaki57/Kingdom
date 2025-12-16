@@ -1,6 +1,6 @@
 #include <iostream>
-#include <chrono>
 #include "tree.hpp"
+#include "topcamera.hpp"
 #include "../constants.hpp"
 
 Texture2D Tree::sprite;
@@ -14,8 +14,6 @@ Tree::Tree(Vector2 posn_) {
 
 void Tree::LoadSprite() {
     if (!isTextureLoaded) {
-        if (isTextureLoaded) return;
-
         Image imgsprite = LoadImage("Trees.jpg");
 
         if (!IsImageValid(imgsprite)) {

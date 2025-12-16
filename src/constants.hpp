@@ -6,7 +6,7 @@
 // Fill in with useful game constants
 #define SCALING_FACTOR float(/*GetMonitorWidth(GetCurrentMonitor()) / 1600*/2.4)
 #define TILE_SIZE 40 * SCALING_FACTOR
-#define TILE_BORDER_SIZE 2 * SCALING_FACTOR
+#define TILE_BORDER_SIZE 0.8 * SCALING_FACTOR
 
 const std::string RESET_TEXT    = "\033[0m";
 const std::string RED_TEXT      = "\033[31m";      /* Red */

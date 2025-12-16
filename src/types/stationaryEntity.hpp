@@ -1,6 +1,5 @@
 #pragma once
 
-#include "raylib.h"
 #include "entity.hpp"
 
 class StationaryEntity : public Entity {

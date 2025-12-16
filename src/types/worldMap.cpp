@@ -2,6 +2,7 @@
 #include "grasstile.hpp"
 #include "mudtile.hpp"
 #include "topcamera.hpp"
+#include "stationaryEntity.hpp"
 #include <cstdlib>
 #include <cmath>
 #include <algorithm>

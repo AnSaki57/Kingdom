@@ -1,5 +1,4 @@
 #include "stationaryEntity.hpp"
-#include <mutex>
 
 class Tree : public StationaryEntity {
     static Texture2D sprite;
