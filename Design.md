@@ -48,7 +48,8 @@
 6. Collisions
 7. Weapons, enemies, and attacking
 8. Music & sound fx
+9. Better map generation (Perlin noise? Wave function collapse?)
 
 ## Lines of code
-- No comments, no whitespaces:  529 (using `cloc src/`)
-- With comments/whitespaces:    887
+- No comments, no whitespaces:  618 (using `cloc src/`)
+- With comments/whitespaces:    1042

@@ -10,6 +10,11 @@
 #define TILE_SIZE 40 * SCALING_FACTOR
 #define TILE_BORDER_SIZE 0.8 * SCALING_FACTOR
 
+#define RESOURCE_SIZE TILE_SIZE * 0.6
+
+#define POPUP_CIRCLE_SIZE 6 * SCALING_FACTOR
+#define POPUP_CIRCLE_COLOUR {240, 10, 10, 255}
+
 const std::string RESET_TEXT    = "\033[0m";
 const std::string RED_TEXT      = "\033[31m";      /* Red */
 const std::string GREEN_TEXT    = "\033[32m";      /* Green */

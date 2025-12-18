@@ -1,6 +1,7 @@
 #include "game.hpp"
 #include "raylib.h"
 #include "resource_dir.h"
+#include "assets.hpp"
 #include "tree.hpp"
 #include <iostream>
 #include <thread>
@@ -8,25 +9,18 @@
 /**
  * @brief   Initialises the Raylib window context
 */
-Game::Game() {
+Game::Game() : wood({200, 300}, 15) {
 	SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
 	InitWindow(3840, 2160, "Kingdom v0.2");
-	// ToggleBorderlessWindowed(); // Makes the window full-screen
     ToggleFullscreen();
-
 	SearchAndSetResourceDir("assets");
 
     Tree::LoadSprite();         // Initialises static sprite of Tree class used by all members
-
-    /* worldMap.Init();
-    player.Init();
-    camera.Init();*/
+    Assets::LoadAll();
 
 	fps = 40;
 	SetTargetFPS(fps);
     frameCount = 0;
-
-    // WaitTime(1.0);// std::chrono::seconds(1);
 }
 
 /**
@@ -36,6 +30,8 @@ void Game::Init() {
     worldMap.Init();
     player.Init();
     camera.Init();
+
+    wood.setSprite();   // TODO: Remove this after the introduction of the inventory class, and its integration with the player
 }
 
 /**
@@ -43,6 +39,7 @@ void Game::Init() {
 */
 Game::~Game() {
     Tree::UnloadSprite();
+    Assets::UnloadAll();
     CloseWindow();
 }
 
@@ -70,6 +67,8 @@ void Game::Draw() {
 
     worldMap.Draw(camera);
     player.Draw(camera);
+
+    wood.Draw(camera);
 
     EndDrawing();
 }
