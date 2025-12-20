@@ -2,17 +2,6 @@
 #include "topcamera.hpp"
 #include "stationaryEntity.hpp"
 
-/**
- * @brief           Drawing function for the GrassTile class
- * 
- * @param camera    Drawing context to decide whether to draw the Tile or not, as well as get the offset for drawing so
-*/
-void GrassTile::Draw(const TopCamera& camera) const {
-    if (camera.isObjOnScreen(posn)) {
-        DrawRectangle(this->posn.x-camera.posn.x, this->posn.y-camera.posn.y, this->size, this->size, GREEN_);
-        DrawRectangleLinesEx({this->posn.x-camera.posn.x, this->posn.y-camera.posn.y, this->size, this->size}, TILE_BORDER_SIZE, LIGHT_GREEN_);
-        if (tileEntity != nullptr) {
-            tileEntity->Draw(camera);
-        }
-    }
-}
+// Constructors for GrassTile based on Tile's constructor, plus custom Tile attributes
+GrassTile::GrassTile(Vector2 posn_, float size_, float borderSize_, std::unique_ptr<StationaryEntity> tileEntity_) : Tile(posn_, size, borderSize_, std::move(tileEntity_), grassTileStats) {}
+GrassTile::GrassTile(Vector2 posn_, std::unique_ptr<StationaryEntity> tileEntity_) : Tile(posn_, std::move(tileEntity_), grassTileStats) {}

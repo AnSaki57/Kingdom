@@ -14,11 +14,18 @@ Wood::Wood(Vector2 posn_, int count_) : Resource(posn_, count_) {}
 /**
  * @brief   Sets the Texture2D sprite after processing the image
  */
-void Wood::setSprite() {
+void Wood::LoadSprite() {
     Image imgSprite = LoadImage("Wood.png");
     ImageCrop(&imgSprite, {156, 156, 313, 313});
     ImageResize(&imgSprite, RESOURCE_SIZE, RESOURCE_SIZE);
     sprite = LoadTextureFromImage(imgSprite);
+}
+
+/**
+ * @brief   Unloads the static Wood sprite
+ */
+void Wood::UnloadSprite() {
+    UnloadTexture(sprite);
 }
 
 /**

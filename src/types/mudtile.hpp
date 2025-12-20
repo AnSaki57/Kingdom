@@ -8,9 +8,13 @@
  * 
  * Responsibilities:
  *  - Concrete class; must draw itself using Raylib functions
+ * 
+ * Non-responsibilities:
+ *  - Uses default Draw function of parent
  */
 class MudTile : public Tile {
+    static constexpr TileStats mudTileStats = { BROWN_, LIGHT_BROWN_ };
 public:
-    using Tile::Tile;
-    void Draw(const TopCamera& camera) const;
+    MudTile(Vector2 posn_, float size_, float borderSize_, std::unique_ptr<StationaryEntity> tileEntity_);
+    MudTile(Vector2 posn_, std::unique_ptr<StationaryEntity> tileEntity_);
 };

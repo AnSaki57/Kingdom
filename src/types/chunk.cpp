@@ -5,6 +5,7 @@
 #include <random>
 #include <chrono>
 
+// Manual initialisation of default functions
 Chunk::~Chunk() = default;
 Chunk::Chunk(Chunk&&) noexcept = default;
 Chunk& Chunk::operator=(Chunk&&) noexcept = default;
@@ -40,11 +41,18 @@ Chunk::Chunk(TileCreator tc, Vector2 chunkPosn) : posn(chunkPosn) {
 }
 
 /**
+ * @brief   Getter for Chunk posn
+ * 
+ * @returns Chunk posn on the map
+*/
+Vector2 Chunk::GetPosn() const { return posn; }
+
+/**
  * @brief   Getter for Chunk size and posn
  * 
- * @return  Chunk posn, and size in pixels
+ * @returns Chunk posn, and size on the map
 */
-Rectangle Chunk::getPosn() const {
+Rectangle Chunk::GetShape() const {
     return {posn.x, posn.y, CHUNK_SIZE * TILE_SIZE, CHUNK_SIZE * TILE_SIZE};
 }
 
@@ -54,6 +62,7 @@ Rectangle Chunk::getPosn() const {
  * @param camera    Provides drawing context for the underlying Tile class
 */
 void Chunk::Draw(const TopCamera& camera) const {
+    if (!camera.isObjOnScreen(GetShape())) return;
     for (size_t i = 0; i < CHUNK_SIZE; i++) {
         for (size_t j = 0; j < CHUNK_SIZE; j++) {
             if (tiles[i][j]) {

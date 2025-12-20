@@ -1,4 +1,3 @@
-// #include "raylib.h"
 #include "worldMap.hpp"
 #include "grasstile.hpp"
 #include "mudtile.hpp"
@@ -72,7 +71,7 @@ void WorldMap::GenerateChunks(const TopCamera& camera) {
             // Check if a Chunk already exists, either in mapChunks or pendingChunks
             bool chunkExists = false;
             for (const auto& chunk : mapChunks) {
-                Rectangle chunkPosn = chunk->getPosn();
+                Vector2 chunkPosn = chunk->GetPosn();
                 if (std::abs(chunkPosn.x - targetPosn.x) < 1.0f && std::abs(chunkPosn.y - targetPosn.y) < 1.0f) {
                     chunkExists = true;
                     break;

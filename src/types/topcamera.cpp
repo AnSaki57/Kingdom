@@ -50,14 +50,17 @@ void TopCamera::MotionCapture() {
 }
     
 /**
- * @brief   Helper function for other objects to check whether they collide with the camera or not
+ * @brief   Helper function for other objects to check whether they collide with the camera or not (by top-right posn)
 */
 bool TopCamera::isObjOnScreen(Vector2 objPosn) const {
-    if  (
-            objPosn.x - posn.x > GetScreenWidth()  || objPosn.x < posn.x ||
-            objPosn.y - posn.y > GetScreenHeight() || objPosn.y < posn.y 
-        ) {
-        return false;
-    }
-    return true;
+    Rectangle screen = {posn.x, posn.y, float(GetScreenWidth()), float(GetScreenHeight())};
+    return CheckCollisionPointRec(objPosn, screen);
+}
+
+/**
+ * @brief   Helper function for other objects to check whether they collide with the camera or not (by overall shape)
+ */
+bool TopCamera::isObjOnScreen(Rectangle objShape) const {
+    Rectangle screen = {posn.x, posn.y, float(GetScreenWidth()), float(GetScreenHeight())};
+    return CheckCollisionRecs(objShape, screen);
 }

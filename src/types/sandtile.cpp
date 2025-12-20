@@ -2,17 +2,6 @@
 #include "topcamera.hpp"
 #include "stationaryEntity.hpp"
 
-/**
- * @brief           Drawing function for the SandTile class
- * 
- * @param camera    Drawing context to decide whether to draw the Tile or not, as well as get the offset for drawing so
-*/
-void SandTile::Draw(const TopCamera& camera) const {
-    if (camera.isObjOnScreen(posn)) {
-        DrawRectangle(this->posn.x-camera.posn.x, this->posn.y-camera.posn.y, this->size, this->size, SANDY_YELLOW_);
-        DrawRectangleLinesEx({this->posn.x-camera.posn.x, this->posn.y-camera.posn.y, this->size, this->size}, TILE_BORDER_SIZE, LIGHT_SANDY_YELLOW_);
-        if (tileEntity != nullptr) {
-            tileEntity->Draw(camera);
-        }
-    }
-}
+// Constructors for SandTile based on Tile's constructor, plus custom Tile attributes
+SandTile::SandTile(Vector2 posn_, float size_, float borderSize_, std::unique_ptr<StationaryEntity> tileEntity_) : Tile(posn_, size, borderSize_, std::move(tileEntity_), sandTileStats) {}
+SandTile::SandTile(Vector2 posn_, std::unique_ptr<StationaryEntity> tileEntity_) : Tile(posn_, std::move(tileEntity_), sandTileStats) {}

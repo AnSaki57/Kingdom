@@ -2,7 +2,6 @@
 #include "raylib.h"
 #include "resource_dir.h"
 #include "assets.hpp"
-#include "tree.hpp"
 #include "wood.hpp" // TODO: Remove this after the introduction of the inventory class, and its integration with the player
 #include "resource.hpp"
 #include <iostream>
@@ -25,9 +24,8 @@ Game::Game() {
 /**
  * @brief   Initialises the various classes of the game
  */
-void Game::Init() {
-    Tree::LoadSprite();         // Initialises static sprite of Tree class used by all members
-    Assets::LoadAll();
+void Game::Init() {     
+    Assets::LoadAll();  // Initialises static sprites of used by all members of various classes
 
     worldMap.Init();
     player.Init();
@@ -42,7 +40,6 @@ void Game::Init() {
  * @brief   Destroys the Raylib context
 */
 Game::~Game() {
-    Tree::UnloadSprite();
     Assets::UnloadAll();
     CloseWindow();
 }
@@ -72,7 +69,6 @@ void Game::Draw() {
     worldMap.Draw(camera);
     player.Draw(camera);
 
-    // wood.Draw(camera);
     inv.Draw(camera);
 
     EndDrawing();

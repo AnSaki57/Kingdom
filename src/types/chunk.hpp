@@ -17,6 +17,7 @@ class StationaryEntity;
  * Responsibilities:
  *  - Owns the Tiles in it
  *  - Must initialise the Tiles under it with the appropriate type
+ *  - Exposes its size and shape through getters
  */
 class Chunk {
     std::vector<std::vector<std::unique_ptr<Tile>>> tiles;
@@ -32,11 +33,11 @@ public:
     ~Chunk();
     Chunk(Chunk&&) noexcept;
     Chunk& operator=(Chunk&&) noexcept;
-
     // Delete copy components to prevent accidental copying
     Chunk(const Chunk&) = delete;
     Chunk& operator=(const Chunk&) = delete;
 
-    Rectangle getPosn() const;
+    Vector2 GetPosn() const;
+    Rectangle GetShape() const;
     void Draw(const TopCamera& camera) const;
 };

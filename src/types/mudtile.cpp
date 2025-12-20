@@ -2,17 +2,6 @@
 #include "topcamera.hpp"
 #include "stationaryEntity.hpp"
 
-/**
- * @brief           Drawing function for the MudTile class
- * 
- * @param camera    Drawing context to decide whether to draw the Tile or not, as well as get the offset for drawing so
-*/
-void MudTile::Draw(const TopCamera& camera) const {
-    if (camera.isObjOnScreen(posn)) {
-        DrawRectangle(this->posn.x-camera.posn.x, this->posn.y-camera.posn.y, this->size, this->size, BROWN_);
-        DrawRectangleLinesEx({this->posn.x-camera.posn.x, this->posn.y-camera.posn.y, this->size, this->size}, TILE_BORDER_SIZE, LIGHT_BROWN_);
-        if (tileEntity != nullptr) {
-            tileEntity->Draw(camera);
-        }
-    }
-}
+// Constructors for SandTile based on Tile's constructor, plus custom Tile attributes
+MudTile::MudTile(Vector2 posn_, float size_, float borderSize_, std::unique_ptr<StationaryEntity> tileEntity_) : Tile(posn_, size, borderSize_, std::move(tileEntity_), mudTileStats) {}
+MudTile::MudTile(Vector2 posn_, std::unique_ptr<StationaryEntity> tileEntity_) : Tile(posn_, std::move(tileEntity_), mudTileStats) {}

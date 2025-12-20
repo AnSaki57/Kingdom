@@ -16,5 +16,7 @@ public:
     static void LoadSprite();
     static void UnloadSprite();
 
+    Rectangle GetShape() const;
+
     void Draw(const TopCamera& camera) const override;
 };

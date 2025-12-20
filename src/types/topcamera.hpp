@@ -18,4 +18,5 @@ public:
 
     void MotionCapture();
     bool isObjOnScreen(Vector2 objPosn) const;
+    bool isObjOnScreen(Rectangle objShape) const;
 };

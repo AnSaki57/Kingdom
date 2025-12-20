@@ -47,12 +47,19 @@ void Tree::UnloadSprite() {
 }
 
 /**
+ * @brief   Getter for the overall shape of the Tree texture
+ * 
+ * @returns Tile shape, essentially 
+ */
+Rectangle Tree::GetShape() const { return {posn.x, posn.y, TILE_SIZE, TILE_SIZE}; }
+
+/**
  * @brief           Draws the Tree texture (sprite) on the screen
  * 
  * @param camera    Context for drawing the texture on the map
 */
 void Tree::Draw(const TopCamera& camera) const {
-    if (camera.isObjOnScreen(posn)) {
+    if (camera.isObjOnScreen(GetShape())) {
         DrawTexture(sprite, posn.x-camera.posn.x, posn.y-camera.posn.y, WHITE);
     }
 }
