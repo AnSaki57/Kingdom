@@ -3,20 +3,19 @@
 #include "resource_dir.h"
 #include "assets.hpp"
 #include "tree.hpp"
+#include "wood.hpp" // TODO: Remove this after the introduction of the inventory class, and its integration with the player
+#include "resource.hpp"
 #include <iostream>
 #include <thread>
 
 /**
  * @brief   Initialises the Raylib window context
 */
-Game::Game() : wood({200, 300}, 15) {
+Game::Game() {
 	SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
 	InitWindow(3840, 2160, "Kingdom v0.2");
     ToggleFullscreen();
 	SearchAndSetResourceDir("assets");
-
-    Tree::LoadSprite();         // Initialises static sprite of Tree class used by all members
-    Assets::LoadAll();
 
 	fps = 40;
 	SetTargetFPS(fps);
@@ -27,11 +26,16 @@ Game::Game() : wood({200, 300}, 15) {
  * @brief   Initialises the various classes of the game
  */
 void Game::Init() {
+    Tree::LoadSprite();         // Initialises static sprite of Tree class used by all members
+    Assets::LoadAll();
+
     worldMap.Init();
     player.Init();
     camera.Init();
 
-    wood.setSprite();   // TODO: Remove this after the introduction of the inventory class, and its integration with the player
+    // TODO: Delete these 2 lines after integrating inventories into other Entitys
+    inv.Init(2, 3, {400, 400});
+    inv.SetBox(0, 0, std::make_unique<Wood>(inv.GetPosn(), 5));
 }
 
 /**
@@ -68,7 +72,8 @@ void Game::Draw() {
     worldMap.Draw(camera);
     player.Draw(camera);
 
-    wood.Draw(camera);
+    // wood.Draw(camera);
+    inv.Draw(camera);
 
     EndDrawing();
 }

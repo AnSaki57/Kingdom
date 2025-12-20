@@ -1,10 +1,12 @@
 #include "assets.hpp"
+#include "wood.hpp"
 
 /**
  * @brief   Loads all assets, to be used before game starts and after window init
  */
 void Assets::LoadAll() {
     sansSerifBold = LoadFont("SansSerifBold.ttf");
+    Wood::setSprite();
 }
 
 /**

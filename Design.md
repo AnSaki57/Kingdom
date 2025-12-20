@@ -40,7 +40,7 @@
     - <- Player
 
 ## Future ideas
-1. Resources, inventory system
+1. ~Resources, inventory system~
 2. Mining and harvesting, more stationaryEntities
 3. Buildings
 4. User profiles
@@ -51,5 +51,5 @@
 9. Better map generation (Perlin noise? Wave function collapse?)
 
 ## Lines of code
-- No comments, no whitespaces:  618 (using `cloc src/`)
-- With comments/whitespaces:    1042
+- No comments, no whitespaces:  724 (using `cloc src/`)
+- With comments/whitespaces:    1228

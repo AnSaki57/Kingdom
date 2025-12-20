@@ -13,6 +13,12 @@ Resource::Resource(Vector2 posn_, int count_) : posn(posn_), count(count_) {
     if (count>25) count = 25;
 }
 
+// Getters and setters for position, count of Resource
+Vector2 Resource::GetPosn() const { return posn; }
+void Resource::SetPosn(Vector2 posn_) { posn = posn_; }
+int Resource::GetCount() const { return count; }
+void Resource::SetCount(int count_) { count = count_; }
+
 /**
  * @brief   Defines the static font element used by all Resource objects
  */
@@ -25,7 +31,7 @@ void Resource::setFont() {
  * 
  * @param camera    Drawing context on where to draw the resource
  */
-void Resource::Draw(const TopCamera& camera) {
+void Resource::Draw(const TopCamera& camera) const {
     const Texture2D& sprite = getSprite();
 
     DrawTexture(sprite, posn.x-camera.posn.x, posn.y-camera.posn.y, WHITE);

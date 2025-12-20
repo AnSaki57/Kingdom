@@ -13,6 +13,6 @@ class Wood : public Resource {
     static Texture2D sprite;
 public:
     Wood(Vector2 posn_, int count_);
-    void setSprite() override; 
+    static void setSprite() ; 
     const Texture2D& getSprite() const override;
 };

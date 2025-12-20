@@ -1,7 +1,7 @@
 #include "worldMap.hpp"
 #include "player.hpp"
 #include "topcamera.hpp"
-#include "wood.hpp" // TODO: Remove this after the introduction of the inventory class, and its integration with the player
+#include "inventory.hpp"    // TODO: Delete this after incorporating into Entity objects
 
 /**
  * Overall game class to encapsulate all of the game elements
@@ -16,7 +16,7 @@ class Game {
     WorldMap worldMap;
     Player player;
     TopCamera camera;
-    Wood wood;  // TODO: Remove this after the introduction of the inventory class, and its integration with the player
+    Inventory inv;
 
     void HandleEvents();
     void Update();

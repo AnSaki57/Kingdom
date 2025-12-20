@@ -1,5 +1,6 @@
 #include "mobileEntity.hpp"
 #include "progressBar.hpp"
+#include "inventory.hpp"
 
 /**
  * Represents the main playable character of the game
@@ -11,6 +12,7 @@
 class Player : public MobileEntity {
     Texture2D sprite;
     ProgressBar hpBar;
+    Inventory inventory;
 
 public:
     Player();

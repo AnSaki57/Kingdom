@@ -1,6 +1,5 @@
 #pragma once
 
-// #include "raylib.h"
 #include <string>
 
 // Fill in with useful game constants
@@ -14,6 +13,12 @@
 
 #define POPUP_CIRCLE_SIZE 6 * SCALING_FACTOR
 #define POPUP_CIRCLE_COLOUR {240, 10, 10, 255}
+
+#define BOX_SIZE float(TILE_SIZE * 1.2)
+#define BOX_BORDER_WIDTH TILE_BORDER_SIZE * 2
+
+#define BOX_BGCOLOUR {180, 90, 0, 255}
+#define BOX_EDGECOLOUR {140, 70, 0, 255}
 
 const std::string RESET_TEXT    = "\033[0m";
 const std::string RED_TEXT      = "\033[31m";      /* Red */

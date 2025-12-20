@@ -1,6 +1,7 @@
 #include "player.hpp"
-#include <iostream>
 #include "../constants.hpp"
+#include <iostream>
+#include "wood.hpp"
 
 /**
  * @brief   Constructor for the player class
@@ -19,12 +20,16 @@ void Player::Init() {
     ImageResize(&imgsprite, TILE_SIZE, TILE_SIZE);
     sprite = LoadTextureFromImage(imgsprite);
     UnloadImage(imgsprite);
+
+    inventory.Init(1, 10, {(DEFAULT_MONITOR_WIDTH-BOX_SIZE*10)/2, 2000});
+    inventory.SetBox(0, 0, std::make_unique<Wood>(inventory.GetPosn(), 5));
 }
 
+/**
+ * Per-frame updation of the player
+ */
 void Player::Update() {
-    // hpBar.setFill(hpBar.getFill()-0.0003);
-    // if (IsKeyDown(KEY_H)) hpBar.setFill(hpBar.getFill()+0.003);
-    // if (IsKeyDown(KEY_L)) hpBar.setFill(hpBar.getFill()-0.007);
+    hpBar.setFill(CurrHP/TotalHP);
 }
 
 /**
@@ -33,4 +38,5 @@ void Player::Update() {
 void Player::Draw(const TopCamera&) const {
     DrawTexture(sprite, posn.x, posn.y, WHITE);
     hpBar.Draw();
+    inventory.Draw();
 }

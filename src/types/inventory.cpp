@@ -1,0 +1,115 @@
+#include "inventory.hpp"
+#include "../constants.hpp"
+#include "topcamera.hpp"
+
+/**
+ * @brief       Initialiser for the size and posn of the Inventory
+ * 
+ * @param rows_ No. of rows to put in the Inventory
+ * @param cols_ No. of cols to put in the Inventory
+ * @param posn_ Where to put the inventory
+ */
+void Inventory::Init(int rows_, int cols_, Vector2 posn_) {
+    rows = rows_;
+    cols = cols_;
+    posn = posn_;
+
+    boxes.resize(rows);
+    for (size_t row = 0; row < rows; row++) {
+        boxes[row].resize(cols);
+    }
+}   
+
+// Standard getters for rows, cols in Inventory, posn of Inventory
+int Inventory::GetRows() const { return rows; }
+int Inventory::GetCols() const { return cols; }
+Vector2 Inventory::GetPosn() const { return posn; }
+Vector2 Inventory::GetPosn(int row, int col) const { return {posn.x+row*BOX_SIZE, posn.y+col*BOX_SIZE}; }
+
+/**
+ * @brief       Immutable getter for Resource in box
+ * 
+ * @param row   Row of desired box
+ * @param col   Col of desired box
+ * 
+ * @returns     Resource in that box, immutably
+ */
+const Resource* Inventory::GetBoxImmut(int row, int col) const {
+    return boxes[row][col].get();
+}
+
+/**
+ * @brief       Mutable getter for Resource in box
+ * 
+ * @param row   Row of desired box
+ * @param col   Col of desired box
+ * 
+ * @returns     Resource in that box
+ */
+Resource* Inventory::GetBoxMut(int row, int col) {
+    return boxes[row][col].get();
+}
+
+/**
+ * @brief       Setter for a box, with Resource in argument list
+ * 
+ * @param row   Row of desired box
+ * @param col   Col of desired box
+ * @param res   Resource to be moved into the inventory
+ */
+void Inventory::SetBox(int row, int col, std::unique_ptr<Resource> res) {
+    boxes[row][col] = std::move(res);
+    Vector2 boxPosn = GetPosn(row, col);
+    boxes[row][col]->SetPosn({boxPosn.x+float(BOX_SIZE-RESOURCE_SIZE)/2, boxPosn.y+float(BOX_SIZE-RESOURCE_SIZE)/2});
+}
+
+/**
+ * @brief       Deletes Resource in a box
+ * 
+ * @param row   Row of desired box
+ * @param col   Col of desired box
+ */
+void Inventory::DeleteItem(int row, int col) {
+    boxes[row][col] = nullptr;
+}
+
+/**
+ * @brief           Camera-adjusting drawing function for Inventory (& Resources in it)
+ * 
+ * @param camera    Global camera, relative to which the inventory is to be drawn
+ */
+void Inventory::Draw(const TopCamera& camera) const {
+    const int InventoryWidth = cols * BOX_SIZE;
+    const int InventoryHeight = rows * BOX_SIZE;
+
+    DrawRectangle(posn.x-camera.posn.x, posn.y-camera.posn.y, InventoryWidth, InventoryHeight, BOX_BGCOLOUR);
+
+    for (size_t row = 0; row < rows; row++) {
+        for (size_t col = 0; col < cols; col++) {
+            Vector2 boxposn = {posn.x + col * BOX_SIZE, posn.y + row * BOX_SIZE};
+            DrawRectangleLinesEx (
+                {
+                    boxposn.x-camera.posn.x, 
+                    boxposn.y-camera.posn.y, 
+                    BOX_SIZE, 
+                    BOX_SIZE
+                }, 
+                BOX_BORDER_WIDTH, 
+                BOX_EDGECOLOUR
+            );
+            if (boxes[row][col] != nullptr) {
+                boxes[row][col]->Draw(camera);
+            }
+        }
+    }
+}
+
+/**
+ * @brief   Camera-agnostic drawing function for Inventory (& Resources in it)
+ */
+void Inventory::Draw() const {
+    TopCamera c;
+    c.Init();
+
+    Draw(c);
+}
