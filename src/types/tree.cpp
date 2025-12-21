@@ -59,7 +59,7 @@ Rectangle Tree::GetShape() const { return {posn.x, posn.y, TILE_SIZE, TILE_SIZE}
  * @param camera    Context for drawing the texture on the map
 */
 void Tree::Draw(const TopCamera& camera) const {
-    if (camera.isObjOnScreen(GetShape())) {
+    if (camera.IsObjOnScreen(GetShape())) {
         DrawTexture(sprite, posn.x-camera.posn.x, posn.y-camera.posn.y, WHITE);
     }
 }

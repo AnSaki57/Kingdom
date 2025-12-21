@@ -1,4 +1,5 @@
 #include "assets.hpp"
+#include "resource.hpp"
 #include "tree.hpp"
 #include "wood.hpp"
 
@@ -7,6 +8,7 @@
  */
 void Assets::LoadAll() {
     sansSerifBold = LoadFont("SansSerifBold.ttf");
+    Resource::SetFont(sansSerifBold);
     Tree::LoadSprite();
     Wood::LoadSprite();
 }

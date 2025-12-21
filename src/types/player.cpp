@@ -22,14 +22,14 @@ void Player::Init() {
     UnloadImage(imgsprite);
 
     inventory.Init(1, 10, {(DEFAULT_MONITOR_WIDTH-BOX_SIZE*10)/2, 2000});
-    inventory.SetBox(0, 0, std::make_unique<Wood>(inventory.GetPosn(), 5));
+    inventory.SetBox(0, 0, 105, wood);
 }
 
 /**
  * Per-frame updation of the player
  */
 void Player::Update() {
-    hpBar.setFill(CurrHP/TotalHP);
+    hpBar.setFill(currHP/totalHP);
 }
 
 /**

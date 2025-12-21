@@ -2,6 +2,7 @@
 #include "../constants.hpp"
 
 Texture2D Wood::sprite = Texture2D();
+bool Wood::isSpriteLoaded = false;
 
 /**
  * @brief           Definition of a Wood object based on parent constructor
@@ -9,16 +10,20 @@ Texture2D Wood::sprite = Texture2D();
  * @param posn_     Where the object is to be placed on the overall map
  * @param count_    The count of the resource for that specific obect-pile
  */
-Wood::Wood(Vector2 posn_, int count_) : Resource(posn_, count_) {}
+Wood::Wood(Vector2 posn_, int count_) : Resource(posn_, count_, ResourceStats({sprite, wood})) {}
 
 /**
  * @brief   Sets the Texture2D sprite after processing the image
  */
 void Wood::LoadSprite() {
-    Image imgSprite = LoadImage("Wood.png");
-    ImageCrop(&imgSprite, {156, 156, 313, 313});
-    ImageResize(&imgSprite, RESOURCE_SIZE, RESOURCE_SIZE);
-    sprite = LoadTextureFromImage(imgSprite);
+    if (!isSpriteLoaded) {
+        Image imgSprite = LoadImage("Wood.png");
+        ImageCrop(&imgSprite, {156, 156, 313, 313});
+        ImageResize(&imgSprite, RESOURCE_SIZE, RESOURCE_SIZE);
+        sprite = LoadTextureFromImage(imgSprite);
+
+        isSpriteLoaded = true;
+    }
 }
 
 /**
@@ -33,6 +38,6 @@ void Wood::UnloadSprite() {
  * 
  * @returns The "wood" sprite
  */
-const Texture2D& Wood::getSprite() const {
+const Texture2D& Wood::GetSprite() const {
     return sprite;
 }

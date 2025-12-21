@@ -1,5 +1,6 @@
 #include "inventory.hpp"
 #include "../constants.hpp"
+#include "wood.hpp"
 #include "topcamera.hpp"
 
 /**
@@ -51,13 +52,23 @@ Resource* Inventory::GetBoxMut(int row, int col) {
 }
 
 /**
- * @brief       Setter for a box, with Resource in argument list
+ * @brief               Setter for a box, with Resource in argument list
  * 
- * @param row   Row of desired box
- * @param col   Col of desired box
- * @param res   Resource to be moved into the inventory
+ * @param row           Row of desired box
+ * @param col           Col of desired box
+ * @param count         Qunatity of resource to set
+ * @param resourceType  Resource to be moved into the inventory
  */
-void Inventory::SetBox(int row, int col, std::unique_ptr<Resource> res) {
+void Inventory::SetBox(int row, int col, int count, enum ResourceType resourceType) {
+    std::unique_ptr<Resource> res;
+    switch (resourceType) {
+        case wood:
+            res = std::make_unique<Wood>(GetPosn(), count);
+            break;
+    
+        default:
+            break;
+    }
     boxes[row][col] = std::move(res);
     Vector2 boxPosn = GetPosn(row, col);
     boxes[row][col]->SetPosn({boxPosn.x+float(BOX_SIZE-RESOURCE_SIZE)/2, boxPosn.y+float(BOX_SIZE-RESOURCE_SIZE)/2});

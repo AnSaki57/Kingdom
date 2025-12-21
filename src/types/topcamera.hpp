@@ -3,6 +3,7 @@
 #include "raylib.h"
 #include "../constants.hpp"
 #define CAMERA_SPEED 8 * SCALING_FACTOR
+#define CAMERA_SPEED_MULTIPLIER 10.0
 
 /**
  * Represents the top-view camera above the Player
@@ -17,6 +18,5 @@ public:
     void Init();
 
     void MotionCapture();
-    bool isObjOnScreen(Vector2 objPosn) const;
-    bool isObjOnScreen(Rectangle objShape) const;
+    bool IsObjOnScreen(Rectangle objShape) const;
 };

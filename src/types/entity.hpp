@@ -10,8 +10,8 @@ class TopCamera;
 class Entity{
 protected:
     Vector2 posn;
-    double TotalHP = 100.0;
-    double CurrHP = 80.0;
+    double totalHP = 100.0;
+    double currHP = 80.0;
     int level = 1;
 
 public:

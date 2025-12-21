@@ -62,7 +62,7 @@ Rectangle Chunk::GetShape() const {
  * @param camera    Provides drawing context for the underlying Tile class
 */
 void Chunk::Draw(const TopCamera& camera) const {
-    if (!camera.isObjOnScreen(GetShape())) return;
+    if (!camera.IsObjOnScreen(GetShape())) return;
     for (size_t i = 0; i < CHUNK_SIZE; i++) {
         for (size_t j = 0; j < CHUNK_SIZE; j++) {
             if (tiles[i][j]) {

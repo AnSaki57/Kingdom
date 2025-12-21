@@ -16,7 +16,7 @@ class Game {
     WorldMap worldMap;
     Player player;
     TopCamera camera;
-    Inventory inv;
+    Inventory inventory;    // TODO: Delete this after incorporating into Entity objects
 
     void HandleEvents();
     void Update();

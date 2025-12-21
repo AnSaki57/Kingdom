@@ -28,6 +28,7 @@
     - -> StationaryEntity
     - <- GrassTile
     - <- MudTile
+    - <- SandTile
 
 - Entity
     - <- StationaryEntity
@@ -38,6 +39,16 @@
 
 - MobileEntity
     - <- Player
+
+- Player
+    - -> ProgressBar
+    - -> Inventory
+
+- Inventory
+    - -> Resource
+
+- Resource
+    - <- Wood
 
 ## Future ideas
 1. ~Resources, inventory system~
@@ -51,5 +62,5 @@
 9. Better map generation (Perlin noise? Wave function collapse?)
 
 ## Lines of code
-- No comments, no whitespaces:  730 (using `cloc src/`)
-- With comments/whitespaces:    1267
+- No comments, no whitespaces:  757 (using `cloc src/`)
+- With comments/whitespaces:    1304

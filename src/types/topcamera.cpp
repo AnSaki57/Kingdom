@@ -19,48 +19,44 @@ void TopCamera::Init() {
 */
 void TopCamera::MotionCapture() {
     Vector2 newPosn = posn;
+    
+    double speedMultiplier = 1.0;
+    if (IsKeyDown(KEY_LEFT_SHIFT)) speedMultiplier = CAMERA_SPEED_MULTIPLIER;
+    double trueSpeed = speed * speedMultiplier;
 
     if (IsKeyDown(KEY_UP)) {
         if (IsKeyDown(KEY_LEFT)) {
-            newPosn.y-=speed * ONE_BY_ROOT2;
-            newPosn.x-=speed * ONE_BY_ROOT2;
+            newPosn.y-=trueSpeed * ONE_BY_ROOT2;
+            newPosn.x-=trueSpeed * ONE_BY_ROOT2;
         } else if (IsKeyDown(KEY_RIGHT)) {
-            newPosn.y-=speed * ONE_BY_ROOT2;
-            newPosn.x+=speed * ONE_BY_ROOT2;
+            newPosn.y-=trueSpeed * ONE_BY_ROOT2;
+            newPosn.x+=trueSpeed * ONE_BY_ROOT2;
         } else {
-            newPosn.y-=speed;
+            newPosn.y-=trueSpeed;
         }
     } else if (IsKeyDown(KEY_DOWN)) {
         if (IsKeyDown(KEY_LEFT)) {
-            newPosn.y+=speed * ONE_BY_ROOT2;
-            newPosn.x-=speed * ONE_BY_ROOT2;
+            newPosn.y+=trueSpeed * ONE_BY_ROOT2;
+            newPosn.x-=trueSpeed * ONE_BY_ROOT2;
         } else if (IsKeyDown(KEY_RIGHT)) {
-            newPosn.y+=speed * ONE_BY_ROOT2;
-            newPosn.x+=speed * ONE_BY_ROOT2;
+            newPosn.y+=trueSpeed * ONE_BY_ROOT2;
+            newPosn.x+=trueSpeed * ONE_BY_ROOT2;
         } else {
-            newPosn.y+=speed;
+            newPosn.y+=trueSpeed;
         }
     } else if (IsKeyDown(KEY_LEFT)) {
-        newPosn.x-=speed;
+        newPosn.x-=trueSpeed;
     } else if (IsKeyDown(KEY_RIGHT)) {
-        newPosn.x+=speed;
+        newPosn.x+=trueSpeed;
     }
 
     posn = newPosn;
-}
-    
-/**
- * @brief   Helper function for other objects to check whether they collide with the camera or not (by top-right posn)
-*/
-bool TopCamera::isObjOnScreen(Vector2 objPosn) const {
-    Rectangle screen = {posn.x, posn.y, float(GetScreenWidth()), float(GetScreenHeight())};
-    return CheckCollisionPointRec(objPosn, screen);
 }
 
 /**
  * @brief   Helper function for other objects to check whether they collide with the camera or not (by overall shape)
  */
-bool TopCamera::isObjOnScreen(Rectangle objShape) const {
+bool TopCamera::IsObjOnScreen(Rectangle objShape) const {
     Rectangle screen = {posn.x, posn.y, float(GetScreenWidth()), float(GetScreenHeight())};
     return CheckCollisionRecs(objShape, screen);
 }

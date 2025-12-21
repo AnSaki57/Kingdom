@@ -12,9 +12,10 @@
  */
 class Wood : public Resource {
     static Texture2D sprite;
+    static bool isSpriteLoaded;
 public:
     Wood(Vector2 posn_, int count_);
     static void LoadSprite(); 
     static void UnloadSprite(); 
-    const Texture2D& getSprite() const override;
+    const Texture2D& GetSprite() const override;
 };

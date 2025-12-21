@@ -4,8 +4,6 @@
 #include "assets.hpp"
 #include "wood.hpp" // TODO: Remove this after the introduction of the inventory class, and its integration with the player
 #include "resource.hpp"
-#include <iostream>
-#include <thread>
 
 /**
  * @brief   Initialises the Raylib window context
@@ -32,8 +30,8 @@ void Game::Init() {
     camera.Init();
 
     // TODO: Delete these 2 lines after integrating inventories into other Entitys
-    inv.Init(2, 3, {400, 400});
-    inv.SetBox(0, 0, std::make_unique<Wood>(inv.GetPosn(), 5));
+    inventory.Init(2, 3, {800, 800});
+    inventory.SetBox(1, 1, 5, wood);
 }
 
 /**
@@ -69,7 +67,7 @@ void Game::Draw() {
     worldMap.Draw(camera);
     player.Draw(camera);
 
-    inv.Draw(camera);
+    inventory.Draw(camera);
 
     EndDrawing();
 }

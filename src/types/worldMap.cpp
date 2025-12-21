@@ -8,7 +8,6 @@
 #include <cmath>
 #include <algorithm>
 #include <vector>
-#include <iostream>
 
 // How many rows/cols of Chunks to generate, starting from where 
 #define CHUNK_LOAD_SIZE_X 4

@@ -31,7 +31,7 @@ Tile::Tile(Vector2 posn_, std::unique_ptr<StationaryEntity> tileEntity_, const T
 /**
  * @brief   Getter for the position of the Tile
  * 
- * @return  Position of the Tile
+ * @returns Position of the Tile
 */
 Vector2 Tile::GetPosn() const {
     return posn;
@@ -40,7 +40,7 @@ Vector2 Tile::GetPosn() const {
 /**
  * @brief   Getter for the overall shape of the Tile
  * 
- * @return  Position and size of the Tile
+ * @returns Position and size of the Tile
 */
 Rectangle Tile::GetShape() const {
     return {posn.x, posn.y, size, size};
@@ -52,7 +52,7 @@ Rectangle Tile::GetShape() const {
  * @param camera    Drawing context to decide whether to draw the Tile or not, as well as get the offset for drawing so
 */
 void Tile::Draw(const TopCamera& camera) const {
-    if (camera.isObjOnScreen(GetShape())) {
+    if (camera.IsObjOnScreen(GetShape())) {
         DrawRectangle(this->posn.x-camera.posn.x, this->posn.y-camera.posn.y, this->size, this->size, tileStats.bgColour);
         DrawRectangleLinesEx({this->posn.x-camera.posn.x, this->posn.y-camera.posn.y, this->size, this->size}, TILE_BORDER_SIZE, tileStats.borderColour);
         if (tileEntity != nullptr) {

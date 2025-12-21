@@ -29,7 +29,7 @@ public:
     Vector2 GetPosn(int row, int col) const;
     const Resource* GetBoxImmut(int row, int col) const;
     Resource* GetBoxMut(int row, int col);
-    void SetBox(int row, int col, std::unique_ptr<Resource> res);
+    void SetBox(int row, int col, int count, enum ResourceType resourceType);
     void DeleteItem(int row, int col);
 
     void Draw() const ;
