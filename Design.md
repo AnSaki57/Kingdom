@@ -62,5 +62,5 @@
 9. Better map generation (Perlin noise? Wave function collapse?)
 
 ## Lines of code
-- No comments, no whitespaces:  875 (using `cloc src/`)
-- With comments/whitespaces:    1518
+- No comments, no whitespaces:  928 (using `cloc src/`)
+- With comments/whitespaces:    1600

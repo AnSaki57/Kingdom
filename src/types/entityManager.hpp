@@ -2,6 +2,7 @@
 #include "player.hpp"
 #include <vector>
 #include <memory>
+#include <tuple>
 
 /**
  * Manages all the Entity objects in the game
@@ -17,6 +18,6 @@ public:
     void Init();
     void GenerateEntities(std::vector<Vector2> newChunksPosns);
     void CheckCollisions(const TopCamera& camera);
-    void Update(const TopCamera& camera);
+    std::vector<std::tuple<Vector2, int, ResourceType>> Update(const TopCamera& camera);
     void Draw(const TopCamera& camera) const;
 };

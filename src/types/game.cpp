@@ -47,6 +47,10 @@ Game::~Game() {
 */
 void Game::HandleEvents() {
     camera.MotionCapture();
+    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+        Vector2 mousePosn = {GetMousePosition().x+camera.GetPosn().x, GetMousePosition().y+camera.GetPosn().y};
+        resourceManager.Delete(mousePosn);
+    }
 }
 
 /**
@@ -56,7 +60,11 @@ void Game::Update() {
     std::vector<Vector2> newChunksPosns = worldMap.GenerateChunks(camera);
     entityManager.GenerateEntities(newChunksPosns);
     entityManager.CheckCollisions(camera);
-    entityManager.Update(camera);
+    std::vector<std::tuple<Vector2, int, ResourceType>> returnResources = entityManager.Update(camera);
+    for (const auto& [posn, count, resourceType] : returnResources) {
+        Vector2 appendPosn = {posn.x+(TILE_SIZE-RESOURCE_SIZE)/2, posn.y+(TILE_SIZE-RESOURCE_SIZE)/2};
+        resourceManager.Append(appendPosn, count, resourceType);
+    }
 }
 
 /**
@@ -67,6 +75,7 @@ void Game::Draw() {
     ClearBackground(BLACK);
 
     worldMap.Draw(camera);
+    resourceManager.Draw(camera);
     entityManager.Draw(camera);
 
     // inventory.Draw(camera);

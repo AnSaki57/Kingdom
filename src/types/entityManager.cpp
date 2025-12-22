@@ -71,13 +71,15 @@ void EntityManager::CheckCollisions(const TopCamera& camera) {
  * 
  * @param camera    Context for what Entitys to update
  */
-void EntityManager::Update(const TopCamera& camera) {
+std::vector<std::tuple<Vector2, int, ResourceType>> EntityManager::Update(const TopCamera& camera) {
+    std::vector<std::tuple<Vector2, int, ResourceType>> returnResources;
+
     for (const auto& i : destroyQueue) {
         auto entityDestroyType = entities[i]->entityType;
-        entities.erase(entities.begin()+i);
         if (entityDestroyType == tree) {
-            // Add wood resource here
+            returnResources.push_back(std::tuple<Vector2, int, ResourceType>(entities[i]->GetHitbox().first, 5, wood));
         }
+        entities.erase(entities.begin()+i);
     }
     destroyQueue.resize(0);
 
@@ -86,6 +88,8 @@ void EntityManager::Update(const TopCamera& camera) {
             entities[i]->Update();
         }
     }
+
+    return returnResources;
 }
 
 /**
@@ -94,9 +98,10 @@ void EntityManager::Update(const TopCamera& camera) {
  * @param camera    Drawing context for the Entitys
  */
 void EntityManager::Draw(const TopCamera& camera) const {
-    for (size_t i = 0; i < entities.size(); i++) {
+    for (size_t i = 1; i < entities.size(); i++) {
         if (entities[i]->followsCamera || camera.IsObjOnScreen(entities[i]->GetHitbox())) {
             entities[i]->Draw(camera);
         }
     }
+    entities[0]->Draw(camera);  // Draw the player over other Entitys
 }

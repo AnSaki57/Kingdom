@@ -1,5 +1,6 @@
 #include "worldMap.hpp"
 #include "entityManager.hpp"
+#include "resourceManager.hpp"
 #include "topcamera.hpp"
 // #include "inventory.hpp"    // TODO: Delete this after incorporating into Entity objects
 
@@ -14,6 +15,7 @@ class Game {
     int fps;
     int frameCount;
     WorldMap worldMap;
+    ResourceManager resourceManager;
     EntityManager entityManager;
     TopCamera camera;
     // Inventory inventory;    // TODO: Delete this after incorporating into Entity objects
