@@ -38,6 +38,6 @@ public:
     WorldMap();
     void Init();
 
-    void GenerateChunks(const TopCamera& camera);
+    std::vector<Vector2> GenerateChunks(const TopCamera& camera);
     void Draw(const TopCamera& camera) const;
 };

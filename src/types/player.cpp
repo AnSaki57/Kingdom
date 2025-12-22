@@ -8,6 +8,7 @@
 */
 Player::Player() : hpBar({float(240), float(1920), float(DEFAULT_MONITOR_WIDTH-480), float(15)}, 3, BLUE, RED, BLACK, 0.8) {
     entityType = player;
+    followsCamera = true;
 }
 
 /**
@@ -45,5 +46,7 @@ void Player::Draw(const TopCamera&) const {
 
 /**
  * @brief   What the player is meant to do on a collision (as of now, nothing)
+ * 
+ * @returns Info abt the Player's response to the collision, that the manager might want to know
  */
-void Player::OnCollision() {}
+EntityCollisionResponse Player::OnCollision(EntityType entityType_) { return none; }

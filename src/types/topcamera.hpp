@@ -17,6 +17,8 @@ public:
     TopCamera();
     void Init();
 
+    Vector2 GetPosn() const;
+
     void MotionCapture();
     bool IsObjOnScreen(Rectangle objShape) const;
     bool IsObjOnScreen(std::pair<Vector2, double> objShape) const;

@@ -53,9 +53,10 @@ void Game::HandleEvents() {
  * @brief   Executes computations in a single frame
 */
 void Game::Update() {
-    worldMap.GenerateChunks(camera);
+    std::vector<Vector2> newChunksPosns = worldMap.GenerateChunks(camera);
+    entityManager.GenerateEntities(newChunksPosns);
+    entityManager.CheckCollisions(camera);
     entityManager.Update(camera);
-    entityManager.CheckCollisions();
 }
 
 /**

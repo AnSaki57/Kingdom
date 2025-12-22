@@ -28,14 +28,7 @@ Chunk::Chunk(TileCreator tc, Vector2 chunkPosn) : posn(chunkPosn) {
         for (size_t j = 0; j < CHUNK_SIZE; j++) {
             Vector2 tilePosn = {chunkPosn.x+i*TILE_SIZE, chunkPosn.y+j*TILE_SIZE};
             
-            // Randomly put a Tree on the Tile
-            int randnum = distribution(generator); 
-            if (randnum % 16 == 0) {
-                auto tree = std::make_unique<Tree>(tilePosn);
-                tiles[i][j] = tc(tilePosn, std::move(tree));
-            } else {
-                tiles[i][j] = tc(tilePosn, nullptr);
-            }
+            tiles[i][j] = tc(tilePosn, nullptr);
         }
     }
 }

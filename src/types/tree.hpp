@@ -18,7 +18,7 @@ public:
 
     Rectangle GetShape() const;
     
-    void Update();
+    void Update() override;
     void Draw(const TopCamera& camera) const override;
-    void OnCollision();
+    EntityCollisionResponse OnCollision(EntityType entityType_) override;
 };

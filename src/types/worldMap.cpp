@@ -36,12 +36,15 @@ void WorldMap::Init() {
 }
 
 /**
- * @brief   Automatically generates Chunks around the place where the camera is focusing on, if those Chunks don't exist already
+ * @brief           Automatically generates Chunks around the place where the camera is focusing on, if those Chunks don't exist already
  * 
  * @param camera    Context provider for where to generate Chunks
+ * 
+ * @returns         Positions of the new Chunks, for use by other generators/initialisers like EntityManager
 */
-void WorldMap::GenerateChunks(const TopCamera& camera) {
+std::vector<Vector2> WorldMap::GenerateChunks(const TopCamera& camera) {
     const double chunkWorldSize = CHUNK_SIZE * TILE_SIZE;
+    std::vector<Vector2> newChunksPosns;
 
     // Lattice position where Chunks are created
     Vector2 currGridPosn = {
@@ -94,9 +97,12 @@ void WorldMap::GenerateChunks(const TopCamera& camera) {
                         return std::make_unique<Chunk>(sandTileCreator, targetPosn);
                     })}
                 );
+                newChunksPosns.push_back(targetPosn);
             }
         }
     }
+
+    return newChunksPosns;
 }
 
 /**

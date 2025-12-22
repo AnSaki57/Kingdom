@@ -17,7 +17,7 @@ class Player : public MobileEntity {
 public:
     Player();
     void Init();
-    void Update();
+    void Update() override;
     void Draw(const TopCamera&) const override;
-    void OnCollision();
+    EntityCollisionResponse OnCollision(EntityType entityType_) override;
 };

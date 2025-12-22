@@ -15,6 +15,13 @@ void TopCamera::Init() {
 }
 
 /**
+ * @brief   Getter for position of the camera
+ * 
+ * @returns Position of the camera
+ */
+Vector2 TopCamera::GetPosn() const { return posn; }
+
+/**
  * @brief   Captures movement keys for moving the camera around
 */
 void TopCamera::MotionCapture() {
@@ -54,7 +61,11 @@ void TopCamera::MotionCapture() {
 }
 
 /**
- * @brief   Helper function for other objects to check whether they collide with the camera or not (by overall shape)
+ * @brief   Helper function for other objects to check whether they intersect with the screen or not (by rectangular hitbox)
+ * 
+ * @param objShape  Shape of object to check
+ * 
+ * @returns Boolean is-on-screen or not
  */
 bool TopCamera::IsObjOnScreen(Rectangle objShape) const {
     Rectangle screen = {posn.x, posn.y, float(GetScreenWidth()), float(GetScreenHeight())};
@@ -62,7 +73,11 @@ bool TopCamera::IsObjOnScreen(Rectangle objShape) const {
 }
 
 /**
- * @brief   Helper function for other objects to check whether they collide with the camera or not (by overall shape)
+ * @brief   Helper function for other objects to check whether they intersect with the screen or not (by circular hitbox)
+ * 
+ * @param objShape  Shape of object to check
+ * 
+ * @returns Boolean is-on-screen or not
  */
 bool TopCamera::IsObjOnScreen(std::pair<Vector2, double> objShape) const {
     Rectangle screen = {posn.x, posn.y, float(GetScreenWidth()), float(GetScreenHeight())};

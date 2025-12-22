@@ -11,10 +11,12 @@
  */
 class EntityManager {
     std::vector<std::unique_ptr<Entity>> entities;
+    std::vector<int> destroyQueue;
 
 public:
     void Init();
+    void GenerateEntities(std::vector<Vector2> newChunksPosns);
+    void CheckCollisions(const TopCamera& camera);
     void Update(const TopCamera& camera);
-    void CheckCollisions();
-    void Draw(const TopCamera& camera);
+    void Draw(const TopCamera& camera) const;
 };

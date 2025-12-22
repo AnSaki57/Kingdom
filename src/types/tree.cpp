@@ -69,7 +69,13 @@ void Tree::Draw(const TopCamera& camera) const {
 
 /**
  * @brief   What a tree does on collision with a hitbox (sample, destroy itself)
+ * 
+ * @returns Info abt the Tree's response to the collision, that the manager might want to know
  */
-void Tree::OnCollision() {
-    this->~Tree();
+EntityCollisionResponse Tree::OnCollision(EntityType entityType_) {
+    if (entityType_ == player) {
+        // std::cout << RED_TEXT << "posn(" << posn.x << "," << posn.y << ")\n" << RESET_TEXT;
+        return destroy;
+    }
+    return none;
 }

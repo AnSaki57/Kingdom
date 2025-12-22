@@ -3,10 +3,6 @@
 #include <functional>
 #include <memory>
 
-#ifndef CHUNK_SIZE
-#define CHUNK_SIZE 32
-#endif
-
 class Tile;
 class TopCamera;
 class StationaryEntity;
