@@ -2,7 +2,7 @@
 #include "raylib.h"
 #include "resource_dir.h"
 #include "assets.hpp"
-#include "wood.hpp" // TODO: Remove this after the introduction of the inventory class, and its integration with the player
+// #include "wood.hpp" // TODO: Remove this after the introduction of the inventory class, and its integration with entities
 #include "resource.hpp"
 
 /**
@@ -26,12 +26,12 @@ void Game::Init() {
     Assets::LoadAll();  // Initialises static sprites of used by all members of various classes
 
     worldMap.Init();
-    player.Init();
+    entityManager.Init();
     camera.Init();
 
     // TODO: Delete these 2 lines after integrating inventories into other Entitys
-    inventory.Init(2, 3, {800, 800});
-    inventory.SetBox(1, 1, 5, wood);
+    // inventory.Init(2, 3, {800, 800});
+    // inventory.SetBox(1, 1, 5, wood);
 }
 
 /**
@@ -54,7 +54,8 @@ void Game::HandleEvents() {
 */
 void Game::Update() {
     worldMap.GenerateChunks(camera);
-    player.Update();
+    entityManager.Update(camera);
+    entityManager.CheckCollisions();
 }
 
 /**
@@ -65,9 +66,9 @@ void Game::Draw() {
     ClearBackground(BLACK);
 
     worldMap.Draw(camera);
-    player.Draw(camera);
+    entityManager.Draw(camera);
 
-    inventory.Draw(camera);
+    // inventory.Draw(camera);
 
     EndDrawing();
 }

@@ -19,4 +19,5 @@ public:
     void Init();
     void Update();
     void Draw(const TopCamera&) const override;
+    void OnCollision();
 };

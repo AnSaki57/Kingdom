@@ -13,6 +13,7 @@ bool Tree::isTextureLoaded = false;
 */
 Tree::Tree(Vector2 posn_) {
     posn = posn_;
+    entityType = tree;
 }
 
 /**
@@ -53,6 +54,8 @@ void Tree::UnloadSprite() {
  */
 Rectangle Tree::GetShape() const { return {posn.x, posn.y, TILE_SIZE, TILE_SIZE}; }
 
+void Tree::Update() {}
+
 /**
  * @brief           Draws the Tree texture (sprite) on the screen
  * 
@@ -62,4 +65,11 @@ void Tree::Draw(const TopCamera& camera) const {
     if (camera.IsObjOnScreen(GetShape())) {
         DrawTexture(sprite, posn.x-camera.posn.x, posn.y-camera.posn.y, WHITE);
     }
+}
+
+/**
+ * @brief   What a tree does on collision with a hitbox (sample, destroy itself)
+ */
+void Tree::OnCollision() {
+    this->~Tree();
 }

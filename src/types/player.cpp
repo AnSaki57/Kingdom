@@ -6,7 +6,9 @@
 /**
  * @brief   Constructor for the player class
 */
-Player::Player() : hpBar({float(240), float(1920), float(DEFAULT_MONITOR_WIDTH-480), float(15)}, 3, BLUE, RED, BLACK, 0.8) {}
+Player::Player() : hpBar({float(240), float(1920), float(DEFAULT_MONITOR_WIDTH-480), float(15)}, 3, BLUE, RED, BLACK, 0.8) {
+    entityType = player;
+}
 
 /**
  * @brief   Initialiser for the player class, handles texture loading 
@@ -26,7 +28,7 @@ void Player::Init() {
 }
 
 /**
- * Per-frame updation of the player
+ * @brief   Per-frame updation of the player
  */
 void Player::Update() {
     hpBar.setFill(currHP/totalHP);
@@ -40,3 +42,8 @@ void Player::Draw(const TopCamera&) const {
     hpBar.Draw();
     inventory.Draw();
 }
+
+/**
+ * @brief   What the player is meant to do on a collision (as of now, nothing)
+ */
+void Player::OnCollision() {}

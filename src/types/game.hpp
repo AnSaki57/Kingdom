@@ -1,7 +1,7 @@
 #include "worldMap.hpp"
-#include "player.hpp"
+#include "entityManager.hpp"
 #include "topcamera.hpp"
-#include "inventory.hpp"    // TODO: Delete this after incorporating into Entity objects
+// #include "inventory.hpp"    // TODO: Delete this after incorporating into Entity objects
 
 /**
  * Overall game class to encapsulate all of the game elements
@@ -14,9 +14,9 @@ class Game {
     int fps;
     int frameCount;
     WorldMap worldMap;
-    Player player;
+    EntityManager entityManager;
     TopCamera camera;
-    Inventory inventory;    // TODO: Delete this after incorporating into Entity objects
+    // Inventory inventory;    // TODO: Delete this after incorporating into Entity objects
 
     void HandleEvents();
     void Update();

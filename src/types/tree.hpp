@@ -17,6 +17,8 @@ public:
     static void UnloadSprite();
 
     Rectangle GetShape() const;
-
+    
+    void Update();
     void Draw(const TopCamera& camera) const override;
+    void OnCollision();
 };

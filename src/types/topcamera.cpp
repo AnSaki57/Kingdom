@@ -60,3 +60,11 @@ bool TopCamera::IsObjOnScreen(Rectangle objShape) const {
     Rectangle screen = {posn.x, posn.y, float(GetScreenWidth()), float(GetScreenHeight())};
     return CheckCollisionRecs(objShape, screen);
 }
+
+/**
+ * @brief   Helper function for other objects to check whether they collide with the camera or not (by overall shape)
+ */
+bool TopCamera::IsObjOnScreen(std::pair<Vector2, double> objShape) const {
+    Rectangle screen = {posn.x, posn.y, float(GetScreenWidth()), float(GetScreenHeight())};
+    return CheckCollisionCircleRec(objShape.first, objShape.second, screen);
+}
