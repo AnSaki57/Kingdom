@@ -25,7 +25,7 @@ void Inventory::Init(int rows_, int cols_, Vector2 posn_) {
 int Inventory::GetRows() const { return rows; }
 int Inventory::GetCols() const { return cols; }
 Vector2 Inventory::GetPosn() const { return posn; }
-Vector2 Inventory::GetPosn(int row, int col) const { return {posn.x+row*BOX_SIZE, posn.y+col*BOX_SIZE}; }
+Vector2 Inventory::GetPosn(int row, int col) const { return {posn.x+col*BOX_SIZE, posn.y+row*BOX_SIZE}; }
 
 /**
  * @brief       Immutable getter for Resource in box
@@ -72,6 +72,39 @@ void Inventory::SetBox(int row, int col, int count, enum ResourceType resourceTy
     boxes[row][col] = std::move(res);
     Vector2 boxPosn = GetPosn(row, col);
     boxes[row][col]->SetPosn({boxPosn.x+float(BOX_SIZE-RESOURCE_SIZE)/2, boxPosn.y+float(BOX_SIZE-RESOURCE_SIZE)/2});
+}
+
+/**
+ * @brief               Puts Resource of a certain count into the inventory, accounting for spills and resourceTypes
+ * 
+ * @param count         Count of Resource to insert
+ * @param resourceType  Type of Resource to insert
+ */
+void Inventory::PutResource(int count, enum ResourceType resourceType) {
+    bool isPut = false;
+    for (size_t row = 0; row < rows; row++) {
+        for (size_t col = 0; col < cols; col++) {
+            if (boxes[row][col] && boxes[row][col]->GetResourceType() != resourceType) {
+                continue;
+            }
+            if (!boxes[row][col]) {
+                SetBox(row, col, 0, resourceType);
+            }
+
+            int transferCount = RESOURCE_MAX_COUNT-boxes[row][col]->GetCount();
+            if (transferCount>=count) {
+                boxes[row][col]->SetCount(boxes[row][col]->GetCount()+count);
+                isPut = true;
+                break;
+            } else {
+                count -= transferCount;
+                boxes[row][col]->SetCount(RESOURCE_MAX_COUNT);
+            }
+        }
+        if (isPut) break;
+    }
+
+    // If not puttable anywhere in the inventory, discard
 }
 
 /**

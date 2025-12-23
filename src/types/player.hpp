@@ -17,6 +17,7 @@ class Player : public MobileEntity {
 public:
     Player();
     void Init();
+    void PutResource(int count, ResourceType resourceType);
     void Update() override;
     void Draw(const TopCamera&) const override;
     EntityCollisionResponse OnCollision(EntityType entityType_) override;

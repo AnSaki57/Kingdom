@@ -25,8 +25,16 @@ void Player::Init() {
     UnloadImage(imgsprite);
 
     inventory.Init(1, 10, {(DEFAULT_MONITOR_WIDTH-BOX_SIZE*10)/2, 2000});
-    inventory.SetBox(0, 0, 105, wood);
+    inventory.SetBox(0, 0, 10, wood);
 }
+
+/**
+ * @brief   Resource putter through count and type of Resource
+ * 
+ * @param count         Count of Resource to insert
+ * @param resourceType  Type of Resource to insert
+ */
+void Player::PutResource(int count, ResourceType resourceType) { inventory.PutResource(count, resourceType); }
 
 /**
  * @brief   Per-frame updation of the player

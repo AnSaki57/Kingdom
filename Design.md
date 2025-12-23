@@ -15,7 +15,8 @@
 
 - Game
     - -> WorldMap
-    - -> Player
+    - -> EntityManager
+    - -> ResourceManager
     - -> TopCamera
 
 - WorldMap
@@ -25,7 +26,7 @@
     - -> Tile
 
 - Tile
-    - -> StationaryEntity
+    - ~-> StationaryEntity~
     - <- GrassTile
     - <- MudTile
     - <- SandTile
@@ -39,6 +40,12 @@
 
 - MobileEntity
     - <- Player
+
+- ResourceManager
+    - -> Resource
+
+- EntityManager
+    - -> Entity
 
 - Player
     - -> ProgressBar
@@ -62,5 +69,5 @@
 9. Better map generation (Perlin noise? Wave function collapse?)
 
 ## Lines of code
-- No comments, no whitespaces:  928 (using `cloc src/`)
-- With comments/whitespaces:    1600
+- No comments, no whitespaces:  965 (using `cloc src/`)
+- With comments/whitespaces:    1672

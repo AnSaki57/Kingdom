@@ -14,8 +14,7 @@ class ResourceManager {
     std::vector<std::unique_ptr<Resource>> resources;
 
 public:
-    // void Init();
     void Append(Vector2 appendPosn, int count, ResourceType resourceType);
-    void Delete(Vector2 clickPosn);
+    std::pair<int, ResourceType> Delete(Vector2 clickPosn);
     void Draw(const TopCamera& camera) const;
 };

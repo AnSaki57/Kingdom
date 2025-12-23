@@ -14,6 +14,8 @@ class Wood : public Resource {
     static Texture2D sprite;
     static bool isSpriteLoaded;
 public:
+    // using Resource::Resource;    
+
     Wood(Vector2 posn_, int count_);
     static void LoadSprite(); 
     static void UnloadSprite(); 

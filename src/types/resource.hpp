@@ -34,7 +34,7 @@ protected:
     Vector2 posn;
     int count;
     inline static Font countFont = {0};
-    const ResourceStats& resourceStats;
+    ResourceStats resourceStats;
 public:
 
     Resource(Vector2 posn_, int count_, const ResourceStats resourceStats_);
@@ -43,6 +43,7 @@ public:
     void SetPosn(Vector2 posn_);
     int GetCount() const;
     void SetCount(int count_);
+    enum ResourceType GetResourceType() const;
 
     static void SetFont(Font font_);
     virtual ~Resource() = default;

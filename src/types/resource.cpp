@@ -10,7 +10,7 @@
  * @param count_    The count of the resource for that specific object-pile
  */
 Resource::Resource(Vector2 posn_, int count_, const ResourceStats resourceStats_) : posn(posn_), count(count_), resourceStats(resourceStats_) {
-    if (count>25) count = 25;
+    if (count>RESOURCE_MAX_COUNT) count = RESOURCE_MAX_COUNT;
 }
 
 // Getters and setters for position, count of Resource
@@ -18,6 +18,13 @@ Vector2 Resource::GetPosn() const { return posn; }
 void Resource::SetPosn(Vector2 posn_) { posn = posn_; }
 int Resource::GetCount() const { return count; }
 void Resource::SetCount(int count_) { count = count_; }
+
+/**
+ * @brief   Getter for ResourceType of Resource
+ * 
+ * @returns The type of Resource the object is
+ */
+enum ResourceType Resource::GetResourceType() const { return resourceStats.resourceType; }
 
 /**
  * @brief   Defines the static font element used by all Resource objects

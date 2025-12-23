@@ -24,13 +24,17 @@ void ResourceManager::Append(Vector2 appendPosn, int count, ResourceType resourc
  * 
  * @param clickPosn Posn to check for Resource (to delete said resource, if found)
  */
-void ResourceManager::Delete(Vector2 clickPosn) {
+std::pair<int, ResourceType> ResourceManager::Delete(Vector2 clickPosn) {
+    std::pair<int, ResourceType> returnedResource;
     for (size_t i = 0; i < resources.size(); i++) {
         if (CheckCollisionPointRec(clickPosn, {resources[i]->GetPosn().x, resources[i]->GetPosn().y, float(RESOURCE_SIZE), float(RESOURCE_SIZE)})) {
-            resources.erase(resources.begin()+i);
-            break;  // If multiple resources on same posn, delete only one
+            returnedResource = std::pair<int, ResourceType>(resources[i]->GetCount(), resources[i]->GetResourceType());
+            resources.erase(resources.begin()+i);   // If multiple resources on same posn, delete only one
+            return returnedResource;  
         }
     }
+
+    return std::pair<int, ResourceType>(0, wood);
 }
 
 /**

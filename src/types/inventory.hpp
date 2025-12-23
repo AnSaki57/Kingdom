@@ -30,6 +30,7 @@ public:
     const Resource* GetBoxImmut(int row, int col) const;
     Resource* GetBoxMut(int row, int col);
     void SetBox(int row, int col, int count, enum ResourceType resourceType);
+    void PutResource(int count, enum ResourceType resourceType);
     void DeleteItem(int row, int col);
 
     void Draw() const ;

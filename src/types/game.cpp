@@ -47,9 +47,11 @@ Game::~Game() {
 */
 void Game::HandleEvents() {
     camera.MotionCapture();
+    // Pick up resources on left mouse click
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
         Vector2 mousePosn = {GetMousePosition().x+camera.GetPosn().x, GetMousePosition().y+camera.GetPosn().y};
-        resourceManager.Delete(mousePosn);
+        std::pair<int, ResourceType> returnResource = resourceManager.Delete(mousePosn);
+        entityManager.PutResource(returnResource.first, returnResource.second);
     }
 }
 
@@ -62,7 +64,7 @@ void Game::Update() {
     entityManager.CheckCollisions(camera);
     std::vector<std::tuple<Vector2, int, ResourceType>> returnResources = entityManager.Update(camera);
     for (const auto& [posn, count, resourceType] : returnResources) {
-        Vector2 appendPosn = {posn.x+(TILE_SIZE-RESOURCE_SIZE)/2, posn.y+(TILE_SIZE-RESOURCE_SIZE)/2};
+        Vector2 appendPosn = {posn.x+float(TILE_SIZE-RESOURCE_SIZE)/2, posn.y+float(TILE_SIZE-RESOURCE_SIZE)/2};
         resourceManager.Append(appendPosn, count, resourceType);
     }
 }
