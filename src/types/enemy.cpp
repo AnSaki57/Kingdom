@@ -12,7 +12,7 @@ bool Enemy::isTextureLoaded = false;
  * 
  * @param posn_ Where to put the Enemy in
  */
-Enemy::Enemy(Vector2 posn_) : MobileEntity(ProgressBar({}, 1, BLUE, RED, BLACK, 0.5)) {
+Enemy::Enemy(Vector2 posn_) : MobileEntity(DefaultHpBar(posn_)) {
     posn = posn_;
     entityType = ENTITY_TYPE_ENEMY;
 }
@@ -51,6 +51,7 @@ void Enemy::Update(const EntityUpdateStats& entityUpdateStats) {
     moveDir = {float(moveDir.x/len), float(moveDir.y/len)};
 
     posn = {posn.x+moveDir.x*ENEMY_SPEED, posn.y+moveDir.y*ENEMY_SPEED};
+    hpBar.SetPosn({posn.x,posn.y-TILE_SIZE/5});
 }
 
 /**
@@ -59,7 +60,15 @@ void Enemy::Update(const EntityUpdateStats& entityUpdateStats) {
 void Enemy::Draw(const TopCamera& camera) const {
     if (camera.IsObjOnScreen(GetHitbox())) {
         DrawTexture(sprite, posn.x-camera.posn.x, posn.y-camera.posn.y, WHITE);
+        hpBar.Draw(camera);
     }
 }
 
+/**
+ * @brief               Reaction of the Enemy to a collision with entityType_
+ * 
+ * @param entityType_   Type of Entity the Enemy collided with
+ * 
+ * @returns             Response of the Enemy (currently, none)
+ */
 EntityCollisionResponse Enemy::OnCollision(EntityType entityType_) { return ENTITY_COLL_NONE; }

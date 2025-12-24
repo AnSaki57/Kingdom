@@ -16,7 +16,7 @@
 #define CHUNK_LOAD_BEGIN_Y -2
 
 /**
- * @brief   Default initialiser for the class
+ * @brief   Default initialiser for the class (for now, empty)
 */
 WorldMap::WorldMap() {}
 

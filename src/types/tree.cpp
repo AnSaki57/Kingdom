@@ -12,7 +12,7 @@ bool Tree::isTextureLoaded = false;
  * 
  * @param posn_ Position on the map to draw the Tree
 */
-Tree::Tree(Vector2 posn_) {
+Tree::Tree(Vector2 posn_) : StationaryEntity(DefaultHpBar(posn_)) {
     posn = posn_;
     entityType = ENTITY_TYPE_TREE;
 }
@@ -68,6 +68,9 @@ void Tree::Update(const EntityUpdateStats&) {}
 void Tree::Draw(const TopCamera& camera) const {
     if (camera.IsObjOnScreen(GetShape())) {
         DrawTexture(sprite, posn.x-camera.posn.x, posn.y-camera.posn.y, WHITE);
+        if (currHP < totalHP) {
+            hpBar.Draw(camera);
+        }
     }
 }
 

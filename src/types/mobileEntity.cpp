@@ -5,4 +5,4 @@
  * 
  * @param hpBar_    Initialser for the overhead hpBar of each MobileEntity
  */
-MobileEntity::MobileEntity(ProgressBar hpBar_) : hpBar(hpBar_) {}
+MobileEntity::MobileEntity(ProgressBar hpBar_) : Entity(hpBar_) {}

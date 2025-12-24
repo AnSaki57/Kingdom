@@ -4,7 +4,7 @@
 #include "wood.hpp"
 
 /**
- * @brief   Constructor for the player class
+ * @brief   Constructor for the player class, with its custom, wide hpBar
 */
 Player::Player() : MobileEntity(ProgressBar({float(240), float(1920), float(DEFAULT_MONITOR_WIDTH-480), float(15)}, 3, BLUE, RED, BLACK, 0.8)) {
     entityType = ENTITY_TYPE_PLAYER;
@@ -25,7 +25,6 @@ void Player::Init() {
     UnloadImage(imgsprite);
 
     inventory.Init(1, 10, {(DEFAULT_MONITOR_WIDTH-BOX_SIZE*10)/2, 2000});
-    inventory.SetBox(0, 1, 10, RESOURCE_TYPE_WOOD);
 }
 
 /**
@@ -49,7 +48,7 @@ void Player::PutResource(int count, ResourceType resourceType) {
  * @brief   Per-frame updation of the player
  */
 void Player::Update(const EntityUpdateStats&) {
-    hpBar.setFill(currHP/totalHP);
+    hpBar.SetFill(currHP/totalHP);
 }
 
 /**

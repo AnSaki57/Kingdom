@@ -1,5 +1,7 @@
 #include "raylib.h"
 
+class TopCamera;
+
 /**
  * General-purpose class to draw any kind of progress bar (health bars, cooldown, etc.)
  * 
@@ -8,7 +10,9 @@
  *  - Maintains value of fill ratio
  */
 class ProgressBar{
-    Rectangle posn;
+    Vector2 posn;
+    double width;
+    double height;
     double borderWidth;
     Color bgColour;
     Color fillColour;
@@ -17,8 +21,10 @@ class ProgressBar{
 
 public:
     ProgressBar(Rectangle posn_, double borderWidth_, Color bgColour_, Color fillColour_, Color borderColour_, double fill_); 
-    double getFill() const;
-    void setFill(double fill_);
+    void SetPosn(Vector2 posn_);
+    double GetFill() const;
+    void SetFill(double fill_);
 
+    void Draw(const TopCamera& camera) const;
     void Draw() const;
 };
