@@ -6,7 +6,7 @@
 /**
  * @brief   Constructor for the player class
 */
-Player::Player() : hpBar({float(240), float(1920), float(DEFAULT_MONITOR_WIDTH-480), float(15)}, 3, BLUE, RED, BLACK, 0.8) {
+Player::Player() : MobileEntity(ProgressBar({float(240), float(1920), float(DEFAULT_MONITOR_WIDTH-480), float(15)}, 3, BLUE, RED, BLACK, 0.8)) {
     entityType = ENTITY_TYPE_PLAYER;
     followsCamera = true;
 }
@@ -15,18 +15,25 @@ Player::Player() : hpBar({float(240), float(1920), float(DEFAULT_MONITOR_WIDTH-4
  * @brief   Initialiser for the player class, handles texture loading 
 */
 void Player::Init() {
-    posn = {float(GetMonitorWidth(GetCurrentMonitor()))/2, float(GetMonitorHeight(GetCurrentMonitor()))/2};
+    posn = {float(GetMonitorWidth(GetCurrentMonitor())-ENTITY_SIZE)/2, float(GetMonitorHeight(GetCurrentMonitor())-ENTITY_SIZE)/2};
 
     // Get sprite
     Image imgsprite = LoadImage("Player2.png");
     // ImageCrop(&imgsprite, {});
-    ImageResize(&imgsprite, TILE_SIZE, TILE_SIZE);
+    ImageResize(&imgsprite, ENTITY_SIZE, ENTITY_SIZE);
     sprite = LoadTextureFromImage(imgsprite);
     UnloadImage(imgsprite);
 
     inventory.Init(1, 10, {(DEFAULT_MONITOR_WIDTH-BOX_SIZE*10)/2, 2000});
     inventory.SetBox(0, 1, 10, RESOURCE_TYPE_WOOD);
 }
+
+/**
+ * @brief   Getter for the Player's position
+ * 
+ * @returns The position of the Player (usually a constant value(?))
+ */
+Vector2 Player::GetPosn() const { return posn; }
 
 /**
  * @brief   Resource putter through count and type of Resource
@@ -41,7 +48,7 @@ void Player::PutResource(int count, ResourceType resourceType) {
 /**
  * @brief   Per-frame updation of the player
  */
-void Player::Update() {
+void Player::Update(const EntityUpdateStats&) {
     hpBar.setFill(currHP/totalHP);
 }
 

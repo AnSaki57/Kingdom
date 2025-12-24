@@ -1,5 +1,4 @@
 #include "mobileEntity.hpp"
-#include "progressBar.hpp"
 #include "inventory.hpp"
 
 /**
@@ -11,14 +10,14 @@
 */
 class Player : public MobileEntity {
     Texture2D sprite;
-    ProgressBar hpBar;
     Inventory inventory;
 
 public:
     Player();
     void Init();
+    Vector2 GetPosn() const;
     void PutResource(int count, ResourceType resourceType);
-    void Update() override;
+    void Update(const EntityUpdateStats&) override;
     void Draw(const TopCamera&) const override;
     EntityCollisionResponse OnCollision(EntityType entityType_) override;
 };

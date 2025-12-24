@@ -10,10 +10,10 @@
 #include <vector>
 
 // How many rows/cols of Chunks to generate, starting from where 
-#define CHUNK_LOAD_SIZE_X 4
-#define CHUNK_LOAD_SIZE_Y 3
-#define CHUNK_LOAD_BEGIN_X -1
-#define CHUNK_LOAD_BEGIN_Y -1
+#define CHUNK_LOAD_SIZE_X 5
+#define CHUNK_LOAD_SIZE_Y 5
+#define CHUNK_LOAD_BEGIN_X -2
+#define CHUNK_LOAD_BEGIN_Y -2
 
 /**
  * @brief   Default initialiser for the class

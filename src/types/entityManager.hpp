@@ -1,5 +1,5 @@
 #include "entity.hpp"
-#include "player.hpp"
+#include "resource.hpp"
 #include <vector>
 #include <memory>
 #include <tuple>

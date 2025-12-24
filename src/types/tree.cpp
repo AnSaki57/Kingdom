@@ -3,6 +3,7 @@
 #include "topcamera.hpp"
 #include "../constants.hpp"
 
+// Initialise static parameters
 Texture2D Tree::sprite;
 bool Tree::isTextureLoaded = false;
 
@@ -54,7 +55,10 @@ void Tree::UnloadSprite() {
  */
 Rectangle Tree::GetShape() const { return {posn.x, posn.y, TILE_SIZE, TILE_SIZE}; }
 
-void Tree::Update() {}
+/**
+ * @brief   Frame-by-frame updation of the Tree (as of now, nothing)
+ */
+void Tree::Update(const EntityUpdateStats&) {}
 
 /**
  * @brief           Draws the Tree texture (sprite) on the screen

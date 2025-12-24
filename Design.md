@@ -26,7 +26,6 @@
     - -> Tile
 
 - Tile
-    - ~-> StationaryEntity~
     - <- GrassTile
     - <- MudTile
     - <- SandTile
@@ -39,7 +38,9 @@
     - <- Tree
 
 - MobileEntity
+    - -> ProgressBar
     - <- Player
+    - <- Enemy
 
 - ResourceManager
     - -> Resource
@@ -48,8 +49,9 @@
     - -> Entity
 
 - Player
-    - -> ProgressBar
     - -> Inventory
+
+- Enemy
 
 - Inventory
     - -> Resource
@@ -69,5 +71,5 @@
 9. Better map generation (Perlin noise? Wave function collapse?)
 
 ## Lines of code
-- No comments, no whitespaces:  978 (using `cloc src/`)
-- With comments/whitespaces:    1694
+- No comments, no whitespaces:  1063 (using `cloc src/`)
+- With comments/whitespaces:    1845

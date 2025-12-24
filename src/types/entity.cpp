@@ -6,4 +6,4 @@
  * 
  * @returns Position, radius of hitbox circle
  */
-std::pair<Vector2, double> Entity::GetHitbox() { return std::pair<Vector2, double>(posn, hitboxRadius); }
+std::pair<Vector2, double> Entity::GetHitbox() const { return std::pair<Vector2, double>(posn, hitboxRadius); }

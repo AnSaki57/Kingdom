@@ -24,6 +24,10 @@ enum EntityCollisionResponse {
     ENTITY_COLL_DESTROY
 };
 
+struct EntityUpdateStats {
+    Vector2 playerPosn;
+};
+
 /**
  * Represents a generic entity on the map
  * 
@@ -33,6 +37,8 @@ enum EntityCollisionResponse {
  */
 class Entity{
 protected:
+    // Texture2D sprite;
+    // ProgressBar hpBar;
     Vector2 posn;
     double hitboxRadius = TILE_SIZE/3;
     double totalHP = 100.0;
@@ -42,8 +48,8 @@ protected:
 public:
     enum EntityType entityType = ENTITY_TYPE_NONE;
     bool followsCamera = false;
-    std::pair<Vector2, double> GetHitbox();
-    virtual void Update() = 0;
+    std::pair<Vector2, double> GetHitbox() const;
+    virtual void Update(const EntityUpdateStats& entityUpdateStats) = 0;
     virtual void Draw(const TopCamera& camera) const = 0;
     virtual ~Entity() = default;
     virtual EntityCollisionResponse OnCollision(EntityType entityType_) = 0;

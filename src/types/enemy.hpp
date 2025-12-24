@@ -1,0 +1,26 @@
+#pragma once
+
+#include "mobileEntity.hpp"
+
+/**
+ * Generic Enemy class (for now, a slow zombie)
+ * 
+ * Responsibilities:
+ *  - Owns its sprite as a static member
+ *  - Deals with updation, drawing, and collision
+ * 
+ * Non-responsibilities:
+ *  - Actual calling of sprite (un)loaders by the Asset class
+ */
+class Enemy : public MobileEntity {
+    static Texture2D sprite;
+    static bool isTextureLoaded;
+
+public:
+    Enemy(Vector2 posn_);
+    static void LoadSprite();
+    static void UnloadSprite();
+    void Update(const EntityUpdateStats& entityUpdateStats) override;
+    void Draw(const TopCamera& camera) const override;
+    EntityCollisionResponse OnCollision(EntityType entityType_) override;
+};

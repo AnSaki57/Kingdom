@@ -1,4 +1,6 @@
 #include "entityManager.hpp"
+#include "player.hpp"
+#include "enemy.hpp"
 #include "topcamera.hpp"
 #include "tree.hpp"
 #include "../constants.hpp"
@@ -24,9 +26,17 @@ void EntityManager::GenerateEntities(std::vector<Vector2> newChunksPosns) {
         for (size_t i = 0; i < CHUNK_SIZE; i++) {
             for (size_t j = 0; j < CHUNK_SIZE; j++) {
                 Vector2 tilePosn = {newChunkPosn.x + i * TILE_SIZE, newChunkPosn.y + j * TILE_SIZE};
+
+                // Tree generation
                 int rand = random() % 1000;
                 if (rand < 50) {
                     entities.push_back(std::make_unique<Tree>(tilePosn));
+                }
+
+                // Enemy generation
+                rand = random() % 1000000;
+                if (rand < 250) {
+                    entities.push_back(std::make_unique<Enemy>(tilePosn));
                 }
             }
         }
@@ -81,8 +91,11 @@ void EntityManager::CheckCollisions(const TopCamera& camera) {
  * 
  * @param camera    Context for what Entitys to update
  */
-std::vector<std::tuple<Vector2, int, ResourceType>> EntityManager::Update(const TopCamera& camera) {
+std::vector<std::tuple<Vector2, int, ResourceType>> EntityManager::Update(const TopCamera& camera/*, EntityUpdateStats entityUpdateStats*/) {
     std::vector<std::tuple<Vector2, int, ResourceType>> returnResources;
+    EntityUpdateStats entityUpdateStats;
+    entityUpdateStats.playerPosn = static_cast<Player*>(entities[0].get())->GetPosn();
+    entityUpdateStats.playerPosn = {entityUpdateStats.playerPosn.x+camera.posn.x, entityUpdateStats.playerPosn.y+camera.posn.y};
 
     for (const auto& i : destroyQueue) {
         // If Tree is to be erased, add 5 Wood to the map 
@@ -96,8 +109,22 @@ std::vector<std::tuple<Vector2, int, ResourceType>> EntityManager::Update(const 
     destroyQueue.resize(0);
 
     for (size_t i = 0; i < entities.size(); i++) {
-        if (camera.IsObjOnScreen(entities[i]->GetHitbox())) {
-            entities[i]->Update();
+        switch (entities[i]->entityType) {
+            case ENTITY_TYPE_NONE:
+                break;
+            case ENTITY_TYPE_PLAYER:
+                entities[i]->Update(entityUpdateStats);
+                break;
+            case ENTITY_TYPE_ENEMY:
+                entities[i]->Update(entityUpdateStats);
+            case ENTITY_TYPE_TREE:
+                if (camera.IsObjOnScreen(entities[i]->GetHitbox())) {
+                    entities[i]->Update(entityUpdateStats);
+                }
+                break;
+            
+            default:
+                break;
         }
     }
 

@@ -64,7 +64,7 @@ void Game::Update() {
     std::vector<Vector2> newChunksPosns = worldMap.GenerateChunks(camera);
     entityManager.GenerateEntities(newChunksPosns);
     entityManager.CheckCollisions(camera);
-    std::vector<std::tuple<Vector2, int, ResourceType>> returnResources = entityManager.Update(camera);
+    std::vector<std::tuple<Vector2, int, ResourceType>> returnResources = entityManager.Update(camera/*, EntityUpdateStats()*/);
     for (const auto& [posn, count, resourceType] : returnResources) {
         if (resourceType == RESOURCE_TYPE_NONE) {
             continue;
