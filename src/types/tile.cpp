@@ -15,7 +15,7 @@
  * Ownership:
  *  tileEntity_ is now owned by this Tile
 */
-Tile::Tile(Vector2 posn_, float size_, float borderSize_, std::unique_ptr<StationaryEntity> tileEntity_, const TileStats& tileStats_) : posn(posn_), size(size_), borderSize(borderSize_), tileEntity(std::move(tileEntity_)), tileStats(tileStats_) {}
+Tile::Tile(Vector2 posn_, float size_, float borderSize_, const TileStats& tileStats_) : posn(posn_), size(size_), borderSize(borderSize_), tileStats(tileStats_) {}
 
 /**
  * @brief               Simple constructor for a Tile
@@ -26,7 +26,7 @@ Tile::Tile(Vector2 posn_, float size_, float borderSize_, std::unique_ptr<Statio
  * Ownership:
  *  tileEntity_ is now owned by this Tile
 */
-Tile::Tile(Vector2 posn_, std::unique_ptr<StationaryEntity> tileEntity_, const TileStats& tileStats_) : posn(posn_), size(TILE_SIZE), borderSize(TILE_BORDER_SIZE), tileEntity(std::move(tileEntity_)), tileStats(tileStats_) {}
+Tile::Tile(Vector2 posn_, const TileStats& tileStats_) : posn(posn_), size(TILE_SIZE), borderSize(TILE_BORDER_SIZE), tileStats(tileStats_) {}
 
 /**
  * @brief   Getter for the position of the Tile
@@ -55,8 +55,5 @@ void Tile::Draw(const TopCamera& camera) const {
     if (camera.IsObjOnScreen(GetShape())) {
         DrawRectangle(this->posn.x-camera.posn.x, this->posn.y-camera.posn.y, this->size, this->size, tileStats.bgColour);
         DrawRectangleLinesEx({this->posn.x-camera.posn.x, this->posn.y-camera.posn.y, this->size, this->size}, TILE_BORDER_SIZE, tileStats.borderColour);
-        if (tileEntity != nullptr) {
-            tileEntity->Draw(camera);
-        }
     }
 }

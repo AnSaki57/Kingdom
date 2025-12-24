@@ -20,7 +20,7 @@ class Chunk {
     Vector2 posn;
 
 public:
-    using TileCreator = std::function<std::unique_ptr<Tile>(Vector2 posn, std::unique_ptr<StationaryEntity> tileEntity_)>;
+    using TileCreator = std::function<std::unique_ptr<Tile>(Vector2 posn)>;
 
     Chunk(TileCreator tc, Vector2 chunkPosn);
 

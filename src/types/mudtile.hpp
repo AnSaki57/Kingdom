@@ -15,6 +15,6 @@
 class MudTile : public Tile {
     static constexpr TileStats mudTileStats = { BROWN_, LIGHT_BROWN_ };
 public:
-    MudTile(Vector2 posn_, float size_, float borderSize_, std::unique_ptr<StationaryEntity> tileEntity_);
-    MudTile(Vector2 posn_, std::unique_ptr<StationaryEntity> tileEntity_);
+    MudTile(Vector2 posn_, float size_, float borderSize_);
+    MudTile(Vector2 posn_);
 };

@@ -39,7 +39,7 @@ void EntityManager::GenerateEntities(std::vector<Vector2> newChunksPosns) {
  * @param count         Count of Resource to insert
  * @param resourceType  Type of Resource to insert
  */
-void EntityManager::PutResource(int count, ResourceType resourceType) { dynamic_cast<Player*>(entities[0].get())->PutResource(count, resourceType); }
+void EntityManager::PutResource(int count, ResourceType resourceType) { static_cast<Player*>(entities[0].get())->PutResource(count, resourceType); }
 
 /**
  * @brief           Checks each pair of entities for a hitbox-hitbox collision

@@ -24,14 +24,14 @@ WorldMap::WorldMap() {}
  * @brief   Creates the Tile creation lambdas for the underlying Chunk class
 */
 void WorldMap::Init() {
-    grassTileCreator = [](Vector2 posn, std::unique_ptr<StationaryEntity> tileEntity_) {
-        return std::make_unique<GrassTile>(posn, std::move(tileEntity_));
+    grassTileCreator = [](Vector2 posn) {
+        return std::make_unique<GrassTile>(posn);
     };
-    mudTileCreator = [](Vector2 posn, std::unique_ptr<StationaryEntity> tileEntity_) {
-        return std::make_unique<MudTile>(posn, std::move(tileEntity_));
+    mudTileCreator = [](Vector2 posn) {
+        return std::make_unique<MudTile>(posn);
     };
-    sandTileCreator = [](Vector2 posn, std::unique_ptr<StationaryEntity> tileEntity_) {
-        return std::make_unique<SandTile>(posn, std::move(tileEntity_));
+    sandTileCreator = [](Vector2 posn) {
+        return std::make_unique<SandTile>(posn);
     };
 }
 

@@ -29,11 +29,10 @@ protected:
     float size;
     float borderSize;
     const TileStats& tileStats;
-    std::unique_ptr<StationaryEntity> tileEntity;
 
 public:    
-    Tile(Vector2 posn_, float size_, float borderSize_, std::unique_ptr<StationaryEntity> tileEntity_, const TileStats& tileStats_);
-    Tile(Vector2 posn_, std::unique_ptr<StationaryEntity> tileEntity_, const TileStats& tileStats_);
+    Tile(Vector2 posn_, float size_, float borderSize_, const TileStats& tileStats_);
+    Tile(Vector2 posn_, const TileStats& tileStats_);
     
     Vector2 GetPosn() const;
     Rectangle GetShape() const;

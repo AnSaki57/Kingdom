@@ -28,7 +28,7 @@ Chunk::Chunk(TileCreator tc, Vector2 chunkPosn) : posn(chunkPosn) {
         for (size_t j = 0; j < CHUNK_SIZE; j++) {
             Vector2 tilePosn = {chunkPosn.x+i*TILE_SIZE, chunkPosn.y+j*TILE_SIZE};
             
-            tiles[i][j] = tc(tilePosn, nullptr);
+            tiles[i][j] = tc(tilePosn);
         }
     }
 }

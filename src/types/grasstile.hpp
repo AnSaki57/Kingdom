@@ -15,6 +15,6 @@
 class GrassTile : public Tile {
     static constexpr TileStats grassTileStats = { GREEN_, LIGHT_GREEN_ };
 public:
-    GrassTile(Vector2 posn_, float size_, float borderSize_, std::unique_ptr<StationaryEntity> tileEntity_);
-    GrassTile(Vector2 posn_, std::unique_ptr<StationaryEntity> tileEntity_);
+    GrassTile(Vector2 posn_, float size_, float borderSize_);
+    GrassTile(Vector2 posn_);
 };

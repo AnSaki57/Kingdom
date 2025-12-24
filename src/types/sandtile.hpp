@@ -15,6 +15,6 @@
 class SandTile : public Tile {
     static constexpr TileStats sandTileStats = { SANDY_YELLOW_, LIGHT_SANDY_YELLOW_ };
 public:
-    SandTile(Vector2 posn_, float size_, float borderSize_, std::unique_ptr<StationaryEntity> tileEntity_);
-    SandTile(Vector2 posn_, std::unique_ptr<StationaryEntity> tileEntity_);
+    SandTile(Vector2 posn_, float size_, float borderSize_);
+    SandTile(Vector2 posn_);
 };
