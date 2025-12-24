@@ -2,7 +2,7 @@
 
 #include <string>
 
-// Fill in with useful game constants
+// Fill this with useful game constants
 #define DEFAULT_MONITOR_WIDTH 3840
 #define DEFAULT_MONITOR_HEIGHT 2160
 #define SCALING_FACTOR float(GetScreenWidth()/1600.0)

@@ -91,6 +91,8 @@ std::vector<Vector2> WorldMap::GenerateChunks(const TopCamera& camera) {
                 pendingChunks.push_back({
                     targetPosn,
                     std::async(std::launch::async, [=]() {
+                        // Randomly decide which type of Tiles to make for the entire Chunk
+                        // TODO: Restructure this after Perlin noise/Wavefunction collapse implementation
                         int rand = random() % 3;
                         if (rand==0) return std::make_unique<Chunk>(grassTileCreator, targetPosn);
                         if (rand==1) return std::make_unique<Chunk>(mudTileCreator, targetPosn);

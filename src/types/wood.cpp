@@ -10,8 +10,8 @@ bool Wood::isSpriteLoaded = false;
  * @param posn_     Where the object is to be placed on the overall map
  * @param count_    The count of the resource for that specific obect-pile
  */
-Wood::Wood(Vector2 posn_, int count_) : Resource(posn_, count_, ResourceStats({sprite, wood})) {
-    resourceStats.resourceType = wood;
+Wood::Wood(Vector2 posn_, int count_) : Resource(posn_, count_, ResourceStats({sprite, RESOURCE_TYPE_WOOD})) {
+    resourceStats.resourceType = RESOURCE_TYPE_WOOD;
 }
 
 /**

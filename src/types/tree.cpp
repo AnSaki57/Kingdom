@@ -13,7 +13,7 @@ bool Tree::isTextureLoaded = false;
 */
 Tree::Tree(Vector2 posn_) {
     posn = posn_;
-    entityType = tree;
+    entityType = ENTITY_TYPE_TREE;
 }
 
 /**
@@ -73,9 +73,8 @@ void Tree::Draw(const TopCamera& camera) const {
  * @returns Info abt the Tree's response to the collision, that the manager might want to know
  */
 EntityCollisionResponse Tree::OnCollision(EntityType entityType_) {
-    if (entityType_ == player) {
-        // std::cout << RED_TEXT << "posn(" << posn.x << "," << posn.y << ")\n" << RESET_TEXT;
-        return destroy;
+    if (entityType_ == ENTITY_TYPE_PLAYER) {
+        return ENTITY_COLL_DESTROY;
     }
-    return none;
+    return ENTITY_COLL_NONE;
 }

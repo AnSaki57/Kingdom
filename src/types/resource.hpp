@@ -8,8 +8,9 @@ class TopCamera;
  * List of types of Resources
  */
 enum ResourceType{
-    wood,
-    stone
+    RESOURCE_TYPE_NONE,
+    RESOURCE_TYPE_WOOD,
+    RESOURCE_TYPE_STONE,
 };
 
 /**
@@ -34,7 +35,7 @@ protected:
     Vector2 posn;
     int count;
     inline static Font countFont = {0};
-    ResourceStats resourceStats;
+    ResourceStats resourceStats = {Texture2D(), RESOURCE_TYPE_NONE};
 public:
 
     Resource(Vector2 posn_, int count_, const ResourceStats resourceStats_);

@@ -10,7 +10,9 @@
  */
 void ResourceManager::Append(Vector2 appendPosn, int count, ResourceType resourceType) {
     switch (resourceType) {
-        case wood:
+        case RESOURCE_TYPE_NONE:
+            break;
+        case RESOURCE_TYPE_WOOD:
             resources.push_back(std::move(std::make_unique<Wood>(appendPosn, count)));
             break;
         
@@ -34,7 +36,7 @@ std::pair<int, ResourceType> ResourceManager::Delete(Vector2 clickPosn) {
         }
     }
 
-    return std::pair<int, ResourceType>(0, wood);
+    return std::pair<int, ResourceType>(0, RESOURCE_TYPE_NONE);
 }
 
 /**

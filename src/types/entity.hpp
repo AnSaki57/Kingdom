@@ -9,18 +9,19 @@ class TopCamera;
  * Represents the type of Entitys present in the game (stationary and mobile)
  */
 enum EntityType {
-    tree,
-    boulder,
-    player,
-    enemy
+    ENTITY_TYPE_NONE,
+    ENTITY_TYPE_TREE,
+    ENTITY_TYPE_BOULDER,
+    ENTITY_TYPE_PLAYER,
+    ENTITY_TYPE_ENEMY
 };
 
 /**
  * What must be done to an Entity by the manager, as per the Entity's collision outcome
  */
 enum EntityCollisionResponse {
-    none,
-    destroy
+    ENTITY_COLL_NONE,
+    ENTITY_COLL_DESTROY
 };
 
 /**
@@ -39,7 +40,7 @@ protected:
     int level = 1;
     
 public:
-    enum EntityType entityType;
+    enum EntityType entityType = ENTITY_TYPE_NONE;
     bool followsCamera = false;
     std::pair<Vector2, double> GetHitbox();
     virtual void Update() = 0;

@@ -39,7 +39,9 @@ void EntityManager::GenerateEntities(std::vector<Vector2> newChunksPosns) {
  * @param count         Count of Resource to insert
  * @param resourceType  Type of Resource to insert
  */
-void EntityManager::PutResource(int count, ResourceType resourceType) { static_cast<Player*>(entities[0].get())->PutResource(count, resourceType); }
+void EntityManager::PutResource(int count, ResourceType resourceType) { 
+    static_cast<Player*>(entities[0].get())->PutResource(count, resourceType); 
+}
 
 /**
  * @brief           Checks each pair of entities for a hitbox-hitbox collision
@@ -66,8 +68,8 @@ void EntityManager::CheckCollisions(const TopCamera& camera) {
                 ) {
                     EntityCollisionResponse resp1 = entities[i]->OnCollision(entities[j]->entityType);
                     EntityCollisionResponse resp2 = entities[j]->OnCollision(entities[i]->entityType);
-                    if (resp1 == destroy) destroyQueue.push_back(i); 
-                    if (resp2 == destroy) destroyQueue.push_back(j); 
+                    if (resp1 == ENTITY_COLL_DESTROY) destroyQueue.push_back(i); 
+                    if (resp2 == ENTITY_COLL_DESTROY) destroyQueue.push_back(j); 
                 }
             }
         }
@@ -83,9 +85,11 @@ std::vector<std::tuple<Vector2, int, ResourceType>> EntityManager::Update(const 
     std::vector<std::tuple<Vector2, int, ResourceType>> returnResources;
 
     for (const auto& i : destroyQueue) {
+        // If Tree is to be erased, add 5 Wood to the map 
+        // TODO: Automate this for every Entity
         auto entityDestroyType = entities[i]->entityType;
-        if (entityDestroyType == tree) {
-            returnResources.push_back(std::tuple<Vector2, int, ResourceType>(entities[i]->GetHitbox().first, 5, wood));
+        if (entityDestroyType == ENTITY_TYPE_TREE) {
+            returnResources.push_back(std::tuple<Vector2, int, ResourceType>(entities[i]->GetHitbox().first, 5, RESOURCE_TYPE_WOOD));
         }
         entities.erase(entities.begin()+i);
     }

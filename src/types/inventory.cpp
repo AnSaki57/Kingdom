@@ -62,7 +62,9 @@ Resource* Inventory::GetBoxMut(int row, int col) {
 void Inventory::SetBox(int row, int col, int count, enum ResourceType resourceType) {
     std::unique_ptr<Resource> res;
     switch (resourceType) {
-        case wood:
+        case RESOURCE_TYPE_NONE:
+            break;
+        case RESOURCE_TYPE_WOOD:
             res = std::make_unique<Wood>(GetPosn(), count);
             break;
     
@@ -81,7 +83,14 @@ void Inventory::SetBox(int row, int col, int count, enum ResourceType resourceTy
  * @param resourceType  Type of Resource to insert
  */
 void Inventory::PutResource(int count, enum ResourceType resourceType) {
+    if (resourceType == RESOURCE_TYPE_NONE) {
+        // Ignore empty requests
+        return;
+    }
+
     bool isPut = false;
+
+    // Iterate over all boxes to find place for the Resource
     for (size_t row = 0; row < rows; row++) {
         for (size_t col = 0; col < cols; col++) {
             if (boxes[row][col] && boxes[row][col]->GetResourceType() != resourceType) {
@@ -130,6 +139,7 @@ void Inventory::Draw(const TopCamera& camera) const {
 
     for (size_t row = 0; row < rows; row++) {
         for (size_t col = 0; col < cols; col++) {
+            // Draw each box and its underlying Resource (if it exists)
             Vector2 boxposn = {posn.x + col * BOX_SIZE, posn.y + row * BOX_SIZE};
             DrawRectangleLinesEx (
                 {

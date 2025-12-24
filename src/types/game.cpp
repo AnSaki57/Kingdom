@@ -9,7 +9,9 @@
  * @brief   Initialises the Raylib window context
 */
 Game::Game() {
-	SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
+	srand(time(0));
+
+    SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
 	InitWindow(3840, 2160, "Kingdom v0.2");
     ToggleFullscreen();
 	SearchAndSetResourceDir("assets");
@@ -64,6 +66,9 @@ void Game::Update() {
     entityManager.CheckCollisions(camera);
     std::vector<std::tuple<Vector2, int, ResourceType>> returnResources = entityManager.Update(camera);
     for (const auto& [posn, count, resourceType] : returnResources) {
+        if (resourceType == RESOURCE_TYPE_NONE) {
+            continue;
+        }
         Vector2 appendPosn = {posn.x+float(TILE_SIZE-RESOURCE_SIZE)/2, posn.y+float(TILE_SIZE-RESOURCE_SIZE)/2};
         resourceManager.Append(appendPosn, count, resourceType);
     }

@@ -7,7 +7,7 @@
  * @brief   Constructor for the player class
 */
 Player::Player() : hpBar({float(240), float(1920), float(DEFAULT_MONITOR_WIDTH-480), float(15)}, 3, BLUE, RED, BLACK, 0.8) {
-    entityType = player;
+    entityType = ENTITY_TYPE_PLAYER;
     followsCamera = true;
 }
 
@@ -25,7 +25,7 @@ void Player::Init() {
     UnloadImage(imgsprite);
 
     inventory.Init(1, 10, {(DEFAULT_MONITOR_WIDTH-BOX_SIZE*10)/2, 2000});
-    inventory.SetBox(0, 0, 10, wood);
+    inventory.SetBox(0, 1, 10, RESOURCE_TYPE_WOOD);
 }
 
 /**
@@ -34,7 +34,9 @@ void Player::Init() {
  * @param count         Count of Resource to insert
  * @param resourceType  Type of Resource to insert
  */
-void Player::PutResource(int count, ResourceType resourceType) { inventory.PutResource(count, resourceType); }
+void Player::PutResource(int count, ResourceType resourceType) { 
+    inventory.PutResource(count, resourceType); 
+}
 
 /**
  * @brief   Per-frame updation of the player
@@ -57,4 +59,4 @@ void Player::Draw(const TopCamera&) const {
  * 
  * @returns Info abt the Player's response to the collision, that the manager might want to know
  */
-EntityCollisionResponse Player::OnCollision(EntityType entityType_) { return none; }
+EntityCollisionResponse Player::OnCollision(EntityType entityType_) { return ENTITY_COLL_NONE; }
