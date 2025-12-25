@@ -11,10 +11,13 @@ class TopCamera;
  */
 enum EntityType {
     ENTITY_TYPE_NONE,
+    // Stationary
     ENTITY_TYPE_TREE,
     ENTITY_TYPE_BOULDER,
+    // Mobile
     ENTITY_TYPE_PLAYER,
-    ENTITY_TYPE_ENEMY
+    ENTITY_TYPE_ENEMY,
+    ENTITY_TYPE_PROJECTILE
 };
 
 /**
@@ -25,6 +28,9 @@ enum EntityCollisionResponse {
     ENTITY_COLL_DESTROY
 };
 
+/**
+ * Full set of Update statistics that an Entity child may ever need for its own Update()
+ */
 struct EntityUpdateStats {
     Vector2 playerPosn;
 };

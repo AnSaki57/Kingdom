@@ -1,5 +1,4 @@
 #include "topcamera.hpp"
-#define ONE_BY_ROOT2 0.707
 
 /**
  * @brief   Constructor for the TopCamera class

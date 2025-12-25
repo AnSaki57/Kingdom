@@ -1,5 +1,4 @@
 #include "player.hpp"
-#include "../constants.hpp"
 #include <iostream>
 #include "wood.hpp"
 

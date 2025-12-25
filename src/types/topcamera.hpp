@@ -2,7 +2,6 @@
 
 #include "raylib.h"
 #include "../constants.hpp"
-#define CAMERA_SPEED 8 * SCALING_FACTOR
 #define CAMERA_SPEED_MULTIPLIER 10.0
 
 /**

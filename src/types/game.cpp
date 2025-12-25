@@ -4,6 +4,7 @@
 #include "assets.hpp"
 // #include "wood.hpp" // TODO: Remove this after the introduction of the inventory class, and its integration with entities
 #include "resource.hpp"
+#include "../constants.hpp"
 
 /**
  * @brief   Initialises the Raylib window context
@@ -16,8 +17,7 @@ Game::Game() {
     ToggleFullscreen();
 	SearchAndSetResourceDir("assets");
 
-	fps = 40;
-	SetTargetFPS(fps);
+	SetTargetFPS(FRAMES_PER_SECOND);
     frameCount = 0;
 }
 
@@ -49,11 +49,17 @@ Game::~Game() {
 */
 void Game::HandleEvents() {
     camera.MotionCapture();
+
     // Pick up resources on left mouse click
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
         Vector2 mousePosn = {GetMousePosition().x+camera.GetPosn().x, GetMousePosition().y+camera.GetPosn().y};
         std::pair<int, ResourceType> returnResource = resourceManager.Delete(mousePosn);
-        entityManager.PutResource(returnResource.first, returnResource.second);
+        
+        if (returnResource.second != RESOURCE_TYPE_NONE) {
+            entityManager.PutResource(returnResource.first, returnResource.second);
+        } else {
+            entityManager.AttackDir(mousePosn, camera);
+        }
     }
 }
 

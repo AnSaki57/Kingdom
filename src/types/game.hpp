@@ -12,7 +12,7 @@
  *  - Manages the initiation and destruction of the map, the Player, and the camera
  */
 class Game {
-    int fps;
+    // int fps;
     int frameCount;
     WorldMap worldMap;
     ResourceManager resourceManager;

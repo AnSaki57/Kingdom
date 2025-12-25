@@ -15,6 +15,7 @@ bool Enemy::isTextureLoaded = false;
 Enemy::Enemy(Vector2 posn_) : MobileEntity(DefaultHpBar(posn_)) {
     posn = posn_;
     entityType = ENTITY_TYPE_ENEMY;
+    hitboxRadius = TILE_SIZE * 0.8;
 }
 
 /**
@@ -71,4 +72,16 @@ void Enemy::Draw(const TopCamera& camera) const {
  * 
  * @returns             Response of the Enemy (currently, none)
  */
-EntityCollisionResponse Enemy::OnCollision(EntityType entityType_) { return ENTITY_COLL_NONE; }
+EntityCollisionResponse Enemy::OnCollision(EntityType entityType_) { 
+    switch (entityType_) {
+        case ENTITY_TYPE_NONE:
+            break;
+        case ENTITY_TYPE_PROJECTILE:
+            return ENTITY_COLL_DESTROY;
+        
+        default:
+            break;
+    }
+
+    return ENTITY_COLL_NONE; 
+}

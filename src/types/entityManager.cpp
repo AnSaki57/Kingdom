@@ -1,9 +1,11 @@
 #include "entityManager.hpp"
 #include "player.hpp"
 #include "enemy.hpp"
+#include "projectile.hpp"
 #include "topcamera.hpp"
 #include "tree.hpp"
 #include "../constants.hpp"
+#include "raymath.h"
 #include <iostream>
 
 /**
@@ -44,6 +46,24 @@ void EntityManager::GenerateEntities(std::vector<Vector2> newChunksPosns) {
 }
 
 /**
+ * @brief   Creates a Projectile in the input position's direction
+ * 
+ * @param dirposn   Position of the mouse click on the overall map
+ * @param camera    Offset context for the projectile's position and direction on the overall map
+ */
+void EntityManager::AttackDir(Vector2 dirposn, const TopCamera& camera) {
+    if (attackCooldown>0) return;           // If cooldown not yet elapsed since last attack, skip this
+
+    Vector2 centre = {GetScreenWidth()/2+camera.GetPosn().x, GetScreenHeight()/2+camera.GetPosn().y};
+    Vector2 attackDir = {dirposn.x-centre.x, dirposn.y-centre.y};
+    attackDir = {attackDir.x*PROJECTILE_SPEED/Vector2Length(attackDir), attackDir.y*PROJECTILE_SPEED/Vector2Length(attackDir)};
+    std::unique_ptr<Projectile> projectile = std::make_unique<Projectile>(centre, attackDir);
+    entities.push_back(std::move(projectile));
+
+    attackCooldown = 1 * FRAMES_PER_SECOND; // Pause for a second before launching another Projectile
+}
+
+/**
  * @brief   Puts resource to the Player Entity's Inventory
  * 
  * @param count         Count of Resource to insert
@@ -67,6 +87,7 @@ void EntityManager::CheckCollisions(const TopCamera& camera) {
             posn1 = {posn1.x+offset.x, posn1.y+offset.y};
 
             for (size_t j = i+1; j < entities.size(); j++) {
+                // Check if entities[i] and entities[j] collide with each other
                 if (
                     entities[j] && 
                     camera.IsObjOnScreen(entities[j]->GetHitbox()) && 
@@ -97,14 +118,18 @@ std::vector<std::tuple<Vector2, int, ResourceType>> EntityManager::Update(const 
     entityUpdateStats.playerPosn = static_cast<Player*>(entities[0].get())->GetPosn();
     entityUpdateStats.playerPosn = {entityUpdateStats.playerPosn.x+camera.posn.x, entityUpdateStats.playerPosn.y+camera.posn.y};
 
-    for (const auto& i : destroyQueue) {
+    for (int i = destroyQueue.size()-1; i >= 0; i--) {
+        if (destroyQueue[i]>=entities.size()) {
+            // In the off-chance that out-of-bounds access occurs
+            continue;
+        }
         // If Tree is to be erased, add 5 Wood to the map 
         // TODO: Automate this for every Entity
-        auto entityDestroyType = entities[i]->entityType;
+        EntityType entityDestroyType = entities[destroyQueue[i]]->entityType;
         if (entityDestroyType == ENTITY_TYPE_TREE) {
-            returnResources.push_back(std::tuple<Vector2, int, ResourceType>(entities[i]->GetHitbox().first, 5, RESOURCE_TYPE_WOOD));
+            returnResources.push_back(std::tuple<Vector2, int, ResourceType>(entities[destroyQueue[i]]->GetHitbox().first, 5, RESOURCE_TYPE_WOOD));
         }
-        entities.erase(entities.begin()+i);
+        entities.erase(entities.begin()+destroyQueue[i]);
     }
     destroyQueue.resize(0);
 
@@ -117,6 +142,10 @@ std::vector<std::tuple<Vector2, int, ResourceType>> EntityManager::Update(const 
                 break;
             case ENTITY_TYPE_ENEMY:
                 entities[i]->Update(entityUpdateStats);
+                break;
+            case ENTITY_TYPE_PROJECTILE:
+                entities[i]->Update(entityUpdateStats);
+                break;
             case ENTITY_TYPE_TREE:
                 if (camera.IsObjOnScreen(entities[i]->GetHitbox())) {
                     entities[i]->Update(entityUpdateStats);
@@ -127,6 +156,8 @@ std::vector<std::tuple<Vector2, int, ResourceType>> EntityManager::Update(const 
                 break;
         }
     }
+
+    if (attackCooldown>0) attackCooldown--;
 
     return returnResources;
 }
