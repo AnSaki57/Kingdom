@@ -19,6 +19,8 @@ Game::Game() {
 
 	SetTargetFPS(FRAMES_PER_SECOND);
     frameCount = 0;
+
+    gameState = GAME_STATE_RUNNING;
 }
 
 /**
@@ -48,7 +50,18 @@ Game::~Game() {
  * @brief   Takes in key/mouse presses and reacts accordingly
 */
 void Game::HandleEvents() {
+    // static int keyCooldown = 0;
     camera.MotionCapture();
+
+    // Handle game pause/play
+    if (/*keyCooldown <= 0 &&*/ IsKeyPressed(KEY_SPACE)) {
+        if (gameState == GAME_STATE_RUNNING) {
+            gameState = GAME_STATE_PAUSED;
+        } else if (gameState == GAME_STATE_PAUSED) {
+            gameState = GAME_STATE_RUNNING;
+        }
+        // keyCooldown = 10;
+    }
 
     // Pick up resources on left mouse click
     if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
@@ -61,6 +74,8 @@ void Game::HandleEvents() {
             entityManager.AttackDir(mousePosn, camera);
         }
     }
+
+    // keyCooldown--;
 }
 
 /**
@@ -102,6 +117,12 @@ void Game::Draw() {
 void Game::Run() {
     while (!WindowShouldClose()) {
         HandleEvents();
+        if (gameState == GAME_STATE_OVER) {
+            break;
+        }
+        if (gameState == GAME_STATE_PAUSED) {
+            continue;
+        }
         Update();
         Draw();
         frameCount++;

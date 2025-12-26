@@ -20,7 +20,7 @@ Projectile::Projectile(Vector2 posn_, Vector2 velocity_) : MobileEntity(Progress
 /**
  * @brief   Frame-by-frame updation of the Projectile's position (EntityUpdateStats not used)
  */
-void Projectile::Update(const EntityUpdateStats&) {
+void Projectile::Update(/*const EntityUpdateStats&*/) {
     posn.x += velocity.x;
     posn.y += velocity.y;
     lifetime--;
@@ -41,7 +41,7 @@ void Projectile::Draw(const TopCamera& camera) const {
  * 
  * @param entityType_   Type of Entity this object collided with
  */
-EntityCollisionResponse Projectile::OnCollision(EntityType entityType_) { 
+EntityCollisionResponse Projectile::OnCollision(EntityType entityType_, EntityUpdateStats entityUpdateStats_) { 
     if (entityType_ == entityType || entityType_ == ENTITY_TYPE_PLAYER) return ENTITY_COLL_NONE;
     return ENTITY_COLL_DESTROY;
 }

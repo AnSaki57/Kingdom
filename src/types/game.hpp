@@ -4,6 +4,12 @@
 #include "topcamera.hpp"
 // #include "inventory.hpp"    // TODO: Delete this after incorporating into Entity objects
 
+enum GameState {
+    GAME_STATE_PAUSED,
+    GAME_STATE_RUNNING,
+    GAME_STATE_OVER
+};
+
 /**
  * Overall game class to encapsulate all of the game elements
  * 
@@ -12,8 +18,8 @@
  *  - Manages the initiation and destruction of the map, the Player, and the camera
  */
 class Game {
-    // int fps;
     int frameCount;
+    GameState gameState = GAME_STATE_PAUSED;
     WorldMap worldMap;
     ResourceManager resourceManager;
     EntityManager entityManager;

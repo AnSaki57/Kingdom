@@ -11,13 +11,19 @@
 class Player : public MobileEntity {
     Texture2D sprite;
     Inventory inventory;
+    double xp = 0;
+    ProgressBar xpBar;
+    bool isAlive = true;
 
 public:
     Player();
     void Init();
     Vector2 GetPosn() const;
+    bool GetLiveness() const;
+    double GetXP() const;
+    void SetXP(double xp_);
     void PutResource(int count, ResourceType resourceType);
-    void Update(const EntityUpdateStats&) override;
+    void Update() override;
     void Draw(const TopCamera&) const override;
-    EntityCollisionResponse OnCollision(EntityType entityType_) override;
+    EntityCollisionResponse OnCollision(EntityType entityType_, EntityUpdateStats entityUpdateStats_) override;
 };

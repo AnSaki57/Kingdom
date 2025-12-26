@@ -46,13 +46,16 @@ void Enemy::UnloadSprite() {
  * 
  * @param entityUpdateStats Information wrapper for anything that a child of Entity may need for its Update function
  */
-void Enemy::Update(const EntityUpdateStats& entityUpdateStats) {
+void Enemy::Update() {
+    // Unit vector in direction of Player
     Vector2 moveDir = {entityUpdateStats.playerPosn.x-posn.x, entityUpdateStats.playerPosn.y-posn.y};
     double len = Vector2Length(moveDir);
     moveDir = {float(moveDir.x/len), float(moveDir.y/len)};
 
+    // Update position, hpBar
     posn = {posn.x+moveDir.x*ENEMY_SPEED, posn.y+moveDir.y*ENEMY_SPEED};
     hpBar.SetPosn({posn.x,posn.y-TILE_SIZE/5});
+    hpBar.SetFill(currHP/totalHP);
 }
 
 /**
@@ -72,12 +75,17 @@ void Enemy::Draw(const TopCamera& camera) const {
  * 
  * @returns             Response of the Enemy (currently, none)
  */
-EntityCollisionResponse Enemy::OnCollision(EntityType entityType_) { 
+EntityCollisionResponse Enemy::OnCollision(EntityType entityType_, EntityUpdateStats entityUpdateStats_) { 
     switch (entityType_) {
         case ENTITY_TYPE_NONE:
             break;
         case ENTITY_TYPE_PROJECTILE:
-            return ENTITY_COLL_DESTROY;
+            currHP-=entityUpdateStats.damage;
+            entityUpdateStats.damage = 0;
+            if (currHP <= 0) {
+                return ENTITY_COLL_DESTROY;
+            }
+            break;
         
         default:
             break;

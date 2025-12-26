@@ -5,7 +5,9 @@
 /**
  * @brief   Constructor for the player class, with its custom, wide hpBar
 */
-Player::Player() : MobileEntity(ProgressBar({float(240), float(1920), float(DEFAULT_MONITOR_WIDTH-480), float(15)}, 3, BLUE, RED, BLACK, 0.8)) {
+Player::Player() : MobileEntity(ProgressBar({float(240), float(80), float(DEFAULT_MONITOR_WIDTH-480), float(20)}, 1.5, GRAY, RED, BLACK, 0.8)) 
+                 , xpBar(ProgressBar({0, DEFAULT_MONITOR_HEIGHT-40, DEFAULT_MONITOR_WIDTH, 20}, 2, WHITE, GREEN, BLACK, 0.2))
+{
     entityType = ENTITY_TYPE_PLAYER;
     followsCamera = true;
 }
@@ -34,6 +36,27 @@ void Player::Init() {
 Vector2 Player::GetPosn() const { return posn; }
 
 /**
+ * @brief   Getter for whether the Player is alive or not
+ * 
+ * @returns Liveness of the Player
+ */
+bool Player::GetLiveness() const { return isAlive; }
+
+/**
+ * @brief   Getter for the player's experience points
+ * 
+ * @returns Player's XP
+ */
+double Player::GetXP() const { return xp; }
+
+/**
+ * @brief       Setter for the player's experience points
+ * 
+ * @param xp_   What the player's xp is to be set as
+ */
+void Player::SetXP(double xp_) { xp=xp_; }
+
+/**
  * @brief   Resource putter through count and type of Resource
  * 
  * @param count         Count of Resource to insert
@@ -46,16 +69,23 @@ void Player::PutResource(int count, ResourceType resourceType) {
 /**
  * @brief   Per-frame updation of the player
  */
-void Player::Update(const EntityUpdateStats&) {
+void Player::Update() {
+    if (currHP<=0) isAlive = false;
     hpBar.SetFill(currHP/totalHP);
+    xpBar.SetFill(double(int(xp)%100)/100);
+    level = int(xp/100)+1;
 }
 
 /**
  * @brief   Draws the player at the very centre of the board
 */
 void Player::Draw(const TopCamera&) const {
+    if (currHP<=0) return;
     DrawTexture(sprite, posn.x, posn.y, WHITE);
     hpBar.Draw();
+    xpBar.Draw();
+    std::string levelText = "Level " + std::to_string(level);
+    DrawText(levelText.c_str(), 10, DEFAULT_MONITOR_HEIGHT-60, 25, BLACK);
     inventory.Draw();
 }
 
@@ -64,4 +94,15 @@ void Player::Draw(const TopCamera&) const {
  * 
  * @returns Info abt the Player's response to the collision, that the manager might want to know
  */
-EntityCollisionResponse Player::OnCollision(EntityType entityType_) { return ENTITY_COLL_NONE; }
+EntityCollisionResponse Player::OnCollision(EntityType entityType_, EntityUpdateStats entityUpdateStats_) { 
+    switch (entityType_) {
+        case ENTITY_TYPE_ENEMY:
+            currHP-=0.1;
+            break;
+        
+        default:
+            break;
+    }
+
+    return ENTITY_COLL_NONE; 
+}

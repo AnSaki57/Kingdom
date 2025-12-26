@@ -20,7 +20,7 @@ public:
     Enemy(Vector2 posn_);
     static void LoadSprite();
     static void UnloadSprite();
-    void Update(const EntityUpdateStats& entityUpdateStats) override;
+    void Update() override;
     void Draw(const TopCamera& camera) const override;
-    EntityCollisionResponse OnCollision(EntityType entityType_) override;
+    EntityCollisionResponse OnCollision(EntityType entityType_, EntityUpdateStats entityUpdateStats_) override;
 };

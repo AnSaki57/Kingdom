@@ -33,6 +33,7 @@ enum EntityCollisionResponse {
  */
 struct EntityUpdateStats {
     Vector2 playerPosn;
+    double damage;
 };
 
 /**
@@ -53,16 +54,18 @@ protected:
     int level = 1;
     
 public:
-    enum EntityType entityType = ENTITY_TYPE_NONE;
+    EntityType entityType = ENTITY_TYPE_NONE;
+    EntityUpdateStats entityUpdateStats;
     bool followsCamera = false;
     Entity(ProgressBar hpBar_);
     std::pair<Vector2, double> GetHitbox() const;
-    virtual void Update(const EntityUpdateStats& entityUpdateStats) = 0;
+    virtual void Update() = 0;
     virtual void Draw(const TopCamera& camera) const = 0;
+    void EntityDraw(const TopCamera& camera) const;
     virtual ~Entity() = default;
-    virtual EntityCollisionResponse OnCollision(EntityType entityType_) = 0;
+    virtual EntityCollisionResponse OnCollision(EntityType entityType_, EntityUpdateStats entityUpdateStats_) = 0;
 };
 
 inline ProgressBar DefaultHpBar(Vector2 posn_) {
-    return ProgressBar({posn_.x, posn_.y-float(ENTITY_SIZE)/5, float(ENTITY_SIZE), float(ENTITY_SIZE)/8}, 1, BLUE, RED, BLACK, 0.5);
+    return ProgressBar({posn_.x, posn_.y-float(ENTITY_SIZE)/5, float(ENTITY_SIZE), float(ENTITY_SIZE)/8}, 1, BLUE, RED, BLACK, 1.0);
 }

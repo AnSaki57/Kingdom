@@ -57,6 +57,13 @@ void TopCamera::MotionCapture() {
     }
 
     posn = newPosn;
+    // Sample code for restricting movement to a 2 x 2 chunk area (comment above line)
+    /*if (
+        newPosn.x >= -TILE_SIZE * CHUNK_SIZE && newPosn.x <= TILE_SIZE * CHUNK_SIZE &&
+        newPosn.y >= -TILE_SIZE * CHUNK_SIZE && newPosn.y <= TILE_SIZE * CHUNK_SIZE
+    ) {
+        posn = newPosn;
+    }*/
 }
 
 /**
