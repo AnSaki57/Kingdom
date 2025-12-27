@@ -17,6 +17,8 @@ class EntityManager {
     int attackCooldown;
 
 public:
+    bool isPlayerAlive = true;
+
     void Init();
     void GenerateEntities(std::vector<Vector2> newChunksPosns);
     void AttackDir(Vector2 dirposn, const TopCamera& camera);

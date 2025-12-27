@@ -23,7 +23,7 @@ Enemy::Enemy(Vector2 posn_) : MobileEntity(DefaultHpBar(posn_)) {
  */
 void Enemy::LoadSprite() {
     if (!isTextureLoaded) {
-        Image imgsprite = LoadImage("Zombie.jpg");
+        Image imgsprite = LoadImage("Knight.png");
         // ImageCrop(&imgsprite, {});
         ImageResize(&imgsprite, ENTITY_SIZE, ENTITY_SIZE);
         sprite = LoadTextureFromImage(imgsprite);

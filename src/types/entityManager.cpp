@@ -148,7 +148,7 @@ void EntityManager::CheckCollisions(const TopCamera& camera) {
  */
 std::vector<std::tuple<Vector2, int, ResourceType>> EntityManager::Update(const TopCamera& camera) {
     if (entities[0] && static_cast<Player*>(entities[0].get())->GetLiveness() == false) {
-        // Implement logic for forwarding death of Player to the Game
+        isPlayerAlive = false;
     }
 
     std::vector<std::tuple<Vector2, int, ResourceType>> returnResources;

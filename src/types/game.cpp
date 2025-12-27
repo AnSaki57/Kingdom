@@ -16,6 +16,15 @@ Game::Game() {
 	InitWindow(3840, 2160, "Kingdom v0.2");
     ToggleFullscreen();
 	SearchAndSetResourceDir("assets");
+    
+    InitAudioDevice();
+
+    introMusic = LoadMusicStream("Music/song3.mp3");    // TODO: Integrate this by playing once before actual music
+    music = LoadMusicStream("Music/song4.mp3");
+    introMusic.looping = false;
+    music.looping = true;
+
+    PlayMusicStream(introMusic);
 
 	SetTargetFPS(FRAMES_PER_SECOND);
     frameCount = 0;
@@ -50,48 +59,59 @@ Game::~Game() {
  * @brief   Takes in key/mouse presses and reacts accordingly
 */
 void Game::HandleEvents() {
-    // static int keyCooldown = 0;
-    camera.MotionCapture();
-
+    
     // Handle game pause/play
-    if (/*keyCooldown <= 0 &&*/ IsKeyPressed(KEY_SPACE)) {
+    if (IsKeyPressed(KEY_SPACE)) {
         if (gameState == GAME_STATE_RUNNING) {
             gameState = GAME_STATE_PAUSED;
         } else if (gameState == GAME_STATE_PAUSED) {
             gameState = GAME_STATE_RUNNING;
         }
-        // keyCooldown = 10;
     }
+    
+    if (gameState == GAME_STATE_RUNNING) {
+        camera.MotionCapture();
 
-    // Pick up resources on left mouse click
-    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
-        Vector2 mousePosn = {GetMousePosition().x+camera.GetPosn().x, GetMousePosition().y+camera.GetPosn().y};
-        std::pair<int, ResourceType> returnResource = resourceManager.Delete(mousePosn);
-        
-        if (returnResource.second != RESOURCE_TYPE_NONE) {
-            entityManager.PutResource(returnResource.first, returnResource.second);
-        } else {
-            entityManager.AttackDir(mousePosn, camera);
+        // Pick up resources on left mouse click
+        if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
+            Vector2 mousePosn = {GetMousePosition().x+camera.GetPosn().x, GetMousePosition().y+camera.GetPosn().y};
+            std::pair<int, ResourceType> returnResource = resourceManager.Delete(mousePosn);
+            
+            if (returnResource.second != RESOURCE_TYPE_NONE) {
+                entityManager.PutResource(returnResource.first, returnResource.second);
+            } else {
+                entityManager.AttackDir(mousePosn, camera);
+            }
         }
     }
-
-    // keyCooldown--;
 }
 
 /**
  * @brief   Executes computations in a single frame
 */
 void Game::Update() {
+    if (!IsMusicStreamPlaying(introMusic)) {
+        if (!IsMusicStreamPlaying(music)) {
+            PlayMusicStream(music);
+        }
+    }
+    UpdateMusicStream(introMusic);
+    UpdateMusicStream(music);
+
     std::vector<Vector2> newChunksPosns = worldMap.GenerateChunks(camera);
     entityManager.GenerateEntities(newChunksPosns);
     entityManager.CheckCollisions(camera);
-    std::vector<std::tuple<Vector2, int, ResourceType>> returnResources = entityManager.Update(camera/*, EntityUpdateStats()*/);
+    std::vector<std::tuple<Vector2, int, ResourceType>> returnResources = entityManager.Update(camera);
     for (const auto& [posn, count, resourceType] : returnResources) {
         if (resourceType == RESOURCE_TYPE_NONE) {
             continue;
         }
         Vector2 appendPosn = {posn.x+float(TILE_SIZE-RESOURCE_SIZE)/2, posn.y+float(TILE_SIZE-RESOURCE_SIZE)/2};
         resourceManager.Append(appendPosn, count, resourceType);
+    }
+
+    if (!entityManager.isPlayerAlive) {
+        gameState = GAME_STATE_OVER;
     }
 }
 
@@ -120,11 +140,13 @@ void Game::Run() {
         if (gameState == GAME_STATE_OVER) {
             break;
         }
+        Draw();
         if (gameState == GAME_STATE_PAUSED) {
+            // BeginDrawing();
+            // EndDrawing();
             continue;
         }
         Update();
-        Draw();
         frameCount++;
     }
 }

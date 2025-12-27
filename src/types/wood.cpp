@@ -19,8 +19,9 @@ Wood::Wood(Vector2 posn_, int count_) : Resource(posn_, count_, ResourceStats({s
  */
 void Wood::LoadSprite() {
     if (!isSpriteLoaded) {
-        Image imgSprite = LoadImage("Wood.png");
-        ImageCrop(&imgSprite, {156, 156, 313, 313});
+        Image imgSprite = LoadImage("Wood2.png");
+        // ImageCrop(&imgSprite, {156, 156, 313, 313});
+        ImageCrop(&imgSprite, {14, 14, 38, 38});
         ImageResize(&imgSprite, RESOURCE_SIZE, RESOURCE_SIZE);
         sprite = LoadTextureFromImage(imgSprite);
 

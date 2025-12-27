@@ -19,6 +19,7 @@ enum GameState {
  */
 class Game {
     int frameCount;
+    Music introMusic, music;
     GameState gameState = GAME_STATE_PAUSED;
     WorldMap worldMap;
     ResourceManager resourceManager;
