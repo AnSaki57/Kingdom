@@ -2,7 +2,7 @@
 
 #include "raylib.h"
 #include "../constants.hpp"
-#define CAMERA_SPEED_MULTIPLIER 10.0
+#define CAMERA_SPEED_MULTIPLIER 0.0
 
 /**
  * Represents the top-view camera above the Player

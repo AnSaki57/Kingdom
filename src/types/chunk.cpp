@@ -26,7 +26,7 @@ Chunk::Chunk(TileCreator tc, Vector2 chunkPosn) : posn(chunkPosn) {
     for (size_t i = 0; i < CHUNK_SIZE; i++) {
         tiles[i].resize(CHUNK_SIZE);
         for (size_t j = 0; j < CHUNK_SIZE; j++) {
-            Vector2 tilePosn = {chunkPosn.x+i*TILE_SIZE, chunkPosn.y+j*TILE_SIZE};
+            Vector2 tilePosn = {float(chunkPosn.x+i*TILE_SIZE), float(chunkPosn.y+j*TILE_SIZE)};
             
             tiles[i][j] = tc(tilePosn);
         }
@@ -46,7 +46,7 @@ Vector2 Chunk::GetPosn() const { return posn; }
  * @returns Chunk posn, and size on the map
 */
 Rectangle Chunk::GetShape() const {
-    return {posn.x, posn.y, CHUNK_SIZE * TILE_SIZE, CHUNK_SIZE * TILE_SIZE};
+    return {posn.x, posn.y, float(CHUNK_SIZE * TILE_SIZE), float(CHUNK_SIZE * TILE_SIZE)};
 }
 
 /**

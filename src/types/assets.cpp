@@ -1,4 +1,5 @@
 #include "assets.hpp"
+#include "entity.hpp"
 #include "enemy.hpp"
 #include "resource.hpp"
 #include "tree.hpp"
@@ -10,6 +11,7 @@
 void Assets::LoadAll() {
     Enemy::LoadSprite();
     sansSerifBold = LoadFont("SansSerifBold.ttf");
+    Entity::SetFont(sansSerifBold);
     Resource::SetFont(sansSerifBold);
     Tree::LoadSprite();
     Wood::LoadSprite();

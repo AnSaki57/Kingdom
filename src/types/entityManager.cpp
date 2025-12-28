@@ -23,11 +23,11 @@ void EntityManager::Init() {
  * 
  * @param newChunksPosns    Location of newly generated Chunks
  */
-void EntityManager::GenerateEntities(std::vector<Vector2> newChunksPosns) {
+void EntityManager::GenerateEntities(std::vector<Vector2> newChunksPosns, int level) {
     for (const auto& newChunkPosn : newChunksPosns) {
         for (size_t i = 0; i < CHUNK_SIZE; i++) {
             for (size_t j = 0; j < CHUNK_SIZE; j++) {
-                Vector2 tilePosn = {newChunkPosn.x + i * TILE_SIZE, newChunkPosn.y + j * TILE_SIZE};
+                Vector2 tilePosn = {float(newChunkPosn.x + i * TILE_SIZE), float(newChunkPosn.y + j * TILE_SIZE)};
 
                 // Tree generation
                 int rand = random() % 1000;
@@ -37,8 +37,41 @@ void EntityManager::GenerateEntities(std::vector<Vector2> newChunksPosns) {
 
                 // Enemy generation
                 rand = random() % 1000000;
-                if (rand < 2500) {
-                    entities.push_back(std::make_unique<Enemy>(tilePosn));
+                if (rand < 1500) {
+                    entities.push_back(std::make_unique<Enemy>(tilePosn, level));
+                }
+            }
+        }
+    }
+}
+
+/**
+ * @brief           Spawns random Enemys around the Player, at given level
+ * 
+ * @param camera    Positional context on where the Player is
+ * @param level     Level of Enemys to add
+ */
+void EntityManager::SpawnEnemies(const TopCamera& camera, int level) {
+    double chunkWorldSize = CHUNK_SIZE * TILE_SIZE;
+    Vector2 currGridPosn = {
+        float(std::floor(camera.posn.x / chunkWorldSize) * chunkWorldSize),
+        float(std::floor(camera.posn.y / chunkWorldSize) * chunkWorldSize)
+    };
+
+    for (int i = -1; i < 2; i++) {
+        for (int j = -1; j < 2; j++) {
+            if (i==0&&j==0) continue;
+
+            Vector2 chunkPosn = {float(currGridPosn.x + chunkWorldSize*i), float(currGridPosn.y + chunkWorldSize*j)};
+
+            // Chunk at i, j
+            for (int row = 0; row < CHUNK_SIZE; row++) {
+                for (int col = 0; col < CHUNK_SIZE; col++) {
+                    Vector2 tilePosn = {float(chunkPosn.x+TILE_SIZE*row), float(chunkPosn.y+TILE_SIZE*col)};
+                    int rand = random() % 1000000;
+                    if (rand < 1000) {
+                        entities.push_back(std::make_unique<Enemy>(tilePosn, level));
+                    }
                 }
             }
         }
@@ -52,15 +85,18 @@ void EntityManager::GenerateEntities(std::vector<Vector2> newChunksPosns) {
  * @param camera    Offset context for the projectile's position and direction on the overall map
  */
 void EntityManager::AttackDir(Vector2 dirposn, const TopCamera& camera) {
-    if (attackCooldown>0) return;           // If cooldown not yet elapsed since last attack, skip this
+    if (!entities[0]->CanAttack()) return;  // If cooldown not yet elapsed since last attack, skip this
 
     Vector2 centre = {GetScreenWidth()/2+camera.GetPosn().x, GetScreenHeight()/2+camera.GetPosn().y};
     Vector2 attackDir = {dirposn.x-centre.x, dirposn.y-centre.y};
-    attackDir = {attackDir.x*PROJECTILE_SPEED/Vector2Length(attackDir), attackDir.y*PROJECTILE_SPEED/Vector2Length(attackDir)};
-    std::unique_ptr<Projectile> projectile = std::make_unique<Projectile>(centre, attackDir);
+    attackDir = {
+        float(attackDir.x*PROJECTILE_SPEED / Vector2Length(attackDir)), 
+        float(attackDir.y*PROJECTILE_SPEED / Vector2Length(attackDir))
+    };
+    std::unique_ptr<Projectile> projectile = std::make_unique<Projectile>(centre, attackDir, entities[0]->GetAttackPower());
     entities.push_back(std::move(projectile));
 
-    attackCooldown = 0.3 * FRAMES_PER_SECOND; // Pause for a second before launching another Projectile
+    entities[0]->ResetAttackCooldown(); // Pause for a second before launching another Projectile
 }
 
 /**
@@ -99,16 +135,26 @@ void EntityManager::CheckCollisions(const TopCamera& camera) {
                     // Collision setup (i does what to j's state, and vice versa)
                     switch (entities[i]->entityType) {
                         case ENTITY_TYPE_PROJECTILE:
-                            entities[j]->entityUpdateStats.damage=40.0;
+                            entities[j]->entityUpdateStats.damage=entities[i]->GetAttackPower()*ProjectileDamageMultiplier(entities[j]->entityType);
                             break;
+                        case ENTITY_TYPE_ENEMY:
+                            if (entities[j]->entityType==ENTITY_TYPE_PLAYER && entities[i]->CanAttack()) {
+                                entities[j]->entityUpdateStats.damage=entities[i]->GetAttackPower();
+                                entities[i]->ResetAttackCooldown();
+                            }
                         
                         default:
                             break;
                     }
                     switch (entities[j]->entityType) {
                         case ENTITY_TYPE_PROJECTILE:
-                            entities[i]->entityUpdateStats.damage=40.0;
+                            entities[i]->entityUpdateStats.damage=entities[j]->GetAttackPower()*ProjectileDamageMultiplier(entities[i]->entityType);
                             break;
+                        case ENTITY_TYPE_ENEMY:
+                            if (entities[i]->entityType==ENTITY_TYPE_PLAYER && entities[j]->CanAttack()) {
+                                entities[i]->entityUpdateStats.damage=entities[j]->GetAttackPower();
+                                entities[j]->ResetAttackCooldown();
+                            }
                         
                         default:
                             break;
@@ -148,13 +194,31 @@ void EntityManager::CheckCollisions(const TopCamera& camera) {
  */
 std::vector<std::tuple<Vector2, int, ResourceType>> EntityManager::Update(const TopCamera& camera) {
     if (entities[0] && static_cast<Player*>(entities[0].get())->GetLiveness() == false) {
+        std::cout << RED_TEXT << "Player died at level " << entities[0]->GetLevel() << "\n" << RESET_TEXT;
         isPlayerAlive = false;
     }
 
     std::vector<std::tuple<Vector2, int, ResourceType>> returnResources;
     EntityUpdateStats entityUpdateStats;
+    entityUpdateStats.damage = 0;
     entityUpdateStats.playerPosn = static_cast<Player*>(entities[0].get())->GetPosn();
     entityUpdateStats.playerPosn = {entityUpdateStats.playerPosn.x+camera.posn.x, entityUpdateStats.playerPosn.y+camera.posn.y};
+
+    // Put some more objects up for destruction
+    for (int i = 0; i < entities.size(); i++) {
+        switch (entities[i]->entityType) {
+            case ENTITY_TYPE_PROJECTILE: {
+                Projectile* projectile = static_cast<Projectile*>(entities[i].get());
+                if (!projectile->ShouldBeAlive()) {
+                    destroyQueue.push_back(i);
+                }
+                break;
+            }
+            
+            default:
+                break;
+        }
+    }
 
     // Destroy Entities scheduled for removal
     for (int i = destroyQueue.size()-1; i >= 0; i--) {
@@ -183,6 +247,7 @@ std::vector<std::tuple<Vector2, int, ResourceType>> EntityManager::Update(const 
     }
     destroyQueue.resize(0);
 
+    // Update the Entities acording to their type
     for (size_t i = 0; i < entities.size(); i++) {
         entities[i]->entityUpdateStats = entityUpdateStats;
         switch (entities[i]->entityType) {
@@ -208,7 +273,9 @@ std::vector<std::tuple<Vector2, int, ResourceType>> EntityManager::Update(const 
         }
     }
 
-    if (attackCooldown>0) attackCooldown--;
+    for (const auto& entity : entities) {
+        entity->UpdateCooldown();
+    }
 
     return returnResources;
 }
@@ -226,10 +293,12 @@ void EntityManager::Draw(const TopCamera& camera) const {
             // Draw the level an object is
             switch (entities[i]->entityType) {
                 case ENTITY_TYPE_ENEMY:
-                case ENTITY_TYPE_TREE:
                     entities[i]->EntityDraw(camera);
                     break;
-                
+                case ENTITY_TYPE_TREE:
+                    if (entities[i]->GetCurrHP()<entities[i]->GetTotalHP())
+                        entities[i]->EntityDraw(camera);
+
                 default:
                     break;
             }

@@ -10,12 +10,26 @@ bool Enemy::isTextureLoaded = false;
 /**
  * @brief       Enemy constructor, initialises the ProgressBar as well
  * 
- * @param posn_ Where to put the Enemy in
+ * @param posn_ Where to put the Enemy at
  */
 Enemy::Enemy(Vector2 posn_) : MobileEntity(DefaultHpBar(posn_)) {
     posn = posn_;
     entityType = ENTITY_TYPE_ENEMY;
     hitboxRadius = TILE_SIZE * 0.8;
+
+    speed *= GetSpeedMult();
+    totalHP *= GetHealthMult();
+    currHP *= GetHealthMult();
+}
+
+/**
+ * @brief           Enemy constructor, initialising the HP bar and level as well
+ * 
+ * @param posn_     Where to put the Enemy at
+ * @param level_    What level of enemy to create
+ */
+Enemy::Enemy(Vector2 posn_, int level_) : Enemy(posn_) {
+    level = level_;
 }
 
 /**
@@ -23,7 +37,7 @@ Enemy::Enemy(Vector2 posn_) : MobileEntity(DefaultHpBar(posn_)) {
  */
 void Enemy::LoadSprite() {
     if (!isTextureLoaded) {
-        Image imgsprite = LoadImage("Knight.png");
+        Image imgsprite = LoadImage("Zombie.jpg");
         // ImageCrop(&imgsprite, {});
         ImageResize(&imgsprite, ENTITY_SIZE, ENTITY_SIZE);
         sprite = LoadTextureFromImage(imgsprite);
@@ -53,8 +67,8 @@ void Enemy::Update() {
     moveDir = {float(moveDir.x/len), float(moveDir.y/len)};
 
     // Update position, hpBar
-    posn = {posn.x+moveDir.x*ENEMY_SPEED, posn.y+moveDir.y*ENEMY_SPEED};
-    hpBar.SetPosn({posn.x,posn.y-TILE_SIZE/5});
+    posn = {float(posn.x+moveDir.x*speed), float(posn.y+moveDir.y*speed)};
+    hpBar.SetPosn({posn.x,float(posn.y-TILE_SIZE/5)});
     hpBar.SetFill(currHP/totalHP);
 }
 

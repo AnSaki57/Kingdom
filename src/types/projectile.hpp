@@ -9,11 +9,12 @@
  */
 class Projectile : public MobileEntity {
     Vector2 velocity;
-    int lifetime = 4000;    // TODO: Integrate this better
+    int lifetime = 40;    // TODO: Integrate this better
 
 public:
-    Projectile(Vector2 posn_, Vector2 velocity_);
+    Projectile(Vector2 posn_, Vector2 velocity_, double attackPower_);
     void Update() override;
+    bool ShouldBeAlive();
     void Draw(const TopCamera& camera) const;
     EntityCollisionResponse OnCollision(EntityType entityType_, EntityUpdateStats entityUpdateStats_) override;
 

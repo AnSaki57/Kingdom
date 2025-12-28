@@ -53,12 +53,14 @@ void Tree::UnloadSprite() {
  * 
  * @returns Tile shape, essentially 
  */
-Rectangle Tree::GetShape() const { return {posn.x, posn.y, TILE_SIZE, TILE_SIZE}; }
+Rectangle Tree::GetShape() const { return {posn.x, posn.y, float(TILE_SIZE), float(TILE_SIZE)}; }
 
 /**
  * @brief   Frame-by-frame updation of the Tree (as of now, nothing)
  */
-void Tree::Update() {}
+void Tree::Update() {
+    hpBar.SetFill(currHP/totalHP);
+}
 
 /**
  * @brief           Draws the Tree texture (sprite) on the screen
@@ -80,12 +82,14 @@ void Tree::Draw(const TopCamera& camera) const {
  * @returns Info abt the Tree's response to the collision, that the manager might want to know
  */
 EntityCollisionResponse Tree::OnCollision(EntityType entityType_, EntityUpdateStats entityUpdateStats_) {
-    if (entityType_ == ENTITY_TYPE_PLAYER) {
+    if (entityType_ == ENTITY_TYPE_PROJECTILE) {
         currHP-=entityUpdateStats.damage;
         entityUpdateStats.damage = 0;
         if (currHP <= 0) {
             return ENTITY_COLL_DESTROY;
         }
+    } else if (entityType_ == ENTITY_TYPE_PLAYER) {
+        return ENTITY_COLL_DESTROY;
     }
     return ENTITY_COLL_NONE;
 }

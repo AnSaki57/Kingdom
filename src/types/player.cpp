@@ -1,6 +1,7 @@
 #include "player.hpp"
 #include <iostream>
 #include "wood.hpp"
+#include "utils.hpp"
 
 /**
  * @brief   Constructor for the player class, with its custom, wide hpBar
@@ -10,6 +11,12 @@ Player::Player() : MobileEntity(ProgressBar({float(240), float(80), float(DEFAUL
 {
     entityType = ENTITY_TYPE_PLAYER;
     followsCamera = true;
+    entityUpdateStats.damage = 0;
+
+    // For testing only
+    /*xp = 3000;
+    level = 31;
+    totalHP = currHP = BASE_ENTITY_HP * Utility::GetMultiplier(level);*/
 }
 
 /**
@@ -25,7 +32,7 @@ void Player::Init() {
     sprite = LoadTextureFromImage(imgsprite);
     UnloadImage(imgsprite);
 
-    inventory.Init(1, 10, {(DEFAULT_MONITOR_WIDTH-BOX_SIZE*10)/2, 2000});
+    inventory.Init(1, 10, {float(DEFAULT_MONITOR_WIDTH-BOX_SIZE*10)/2, 2000});
 }
 
 /**
@@ -71,9 +78,17 @@ void Player::PutResource(int count, ResourceType resourceType) {
  */
 void Player::Update() {
     if (currHP<=0) isAlive = false;
+    // level = int(xp/100)+1;
+    if (int(xp/100)+1>level) {
+        level = int(xp/100)+1;
+        totalHP*=BASE_LEVEL_MULTIPLIER;
+        if (level%10==0)
+            currHP=totalHP;
+    }
+    // currHP = GetCurrHP() * GetHealthMult();
+    // totalHP = GetTotalHP() * GetHealthMult();
     hpBar.SetFill(currHP/totalHP);
     xpBar.SetFill(double(int(xp)%100)/100);
-    level = int(xp/100)+1;
 }
 
 /**
@@ -97,7 +112,7 @@ void Player::Draw(const TopCamera&) const {
 EntityCollisionResponse Player::OnCollision(EntityType entityType_, EntityUpdateStats entityUpdateStats_) { 
     switch (entityType_) {
         case ENTITY_TYPE_ENEMY:
-            currHP-=0.1;
+            currHP-=entityUpdateStats.damage;
             break;
         
         default:

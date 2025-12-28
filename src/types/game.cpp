@@ -2,7 +2,6 @@
 #include "raylib.h"
 #include "resource_dir.h"
 #include "assets.hpp"
-// #include "wood.hpp" // TODO: Remove this after the introduction of the inventory class, and its integration with entities
 #include "resource.hpp"
 #include "../constants.hpp"
 
@@ -19,8 +18,8 @@ Game::Game() {
     
     InitAudioDevice();
 
-    introMusic = LoadMusicStream("Music/song3.mp3");    // TODO: Integrate this by playing once before actual music
-    music = LoadMusicStream("Music/song4.mp3");
+    introMusic = LoadMusicStream("Music/song5.mp3");    // TODO: Integrate this by playing once before actual music
+    music = LoadMusicStream("Music/song6.mp3");
     introMusic.looping = false;
     music.looping = true;
 
@@ -41,10 +40,6 @@ void Game::Init() {
     worldMap.Init();
     entityManager.Init();
     camera.Init();
-
-    // TODO: Delete these 2 lines after integrating inventories into other Entitys
-    // inventory.Init(2, 3, {800, 800});
-    // inventory.SetBox(1, 1, 5, wood);
 }
 
 /**
@@ -98,8 +93,11 @@ void Game::Update() {
     UpdateMusicStream(introMusic);
     UpdateMusicStream(music);
 
-    std::vector<Vector2> newChunksPosns = worldMap.GenerateChunks(camera);
-    entityManager.GenerateEntities(newChunksPosns);
+    int targetLevel = int(frameCount*15/(FRAMES_PER_SECOND*60*2));
+    if (targetLevel == 0) targetLevel = 1;
+
+    std::vector<Vector2> newChunksPosns = worldMap.GenerateChunks(camera); // If enemies too hard, change this
+    entityManager.GenerateEntities(newChunksPosns, targetLevel);
     entityManager.CheckCollisions(camera);
     std::vector<std::tuple<Vector2, int, ResourceType>> returnResources = entityManager.Update(camera);
     for (const auto& [posn, count, resourceType] : returnResources) {
@@ -113,6 +111,10 @@ void Game::Update() {
     if (!entityManager.isPlayerAlive) {
         gameState = GAME_STATE_OVER;
     }
+
+    if (frameCount % int(FRAMES_PER_SECOND * 60) == 0) {
+        entityManager.SpawnEnemies(camera, targetLevel);
+    }
 }
 
 /**
@@ -125,8 +127,6 @@ void Game::Draw() {
     worldMap.Draw(camera);
     resourceManager.Draw(camera);
     entityManager.Draw(camera);
-
-    // inventory.Draw(camera);
 
     EndDrawing();
 }
@@ -142,8 +142,6 @@ void Game::Run() {
         }
         Draw();
         if (gameState == GAME_STATE_PAUSED) {
-            // BeginDrawing();
-            // EndDrawing();
             continue;
         }
         Update();

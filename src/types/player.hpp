@@ -11,7 +11,7 @@
 class Player : public MobileEntity {
     Texture2D sprite;
     Inventory inventory;
-    double xp = 0;
+    double xp = 0;      // Defines the Players' level, not the other way round
     ProgressBar xpBar;
     bool isAlive = true;
 

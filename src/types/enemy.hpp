@@ -18,6 +18,7 @@ class Enemy : public MobileEntity {
 
 public:
     Enemy(Vector2 posn_);
+    Enemy(Vector2 posn_, int level_);
     static void LoadSprite();
     static void UnloadSprite();
     void Update() override;

@@ -20,7 +20,8 @@ public:
     bool isPlayerAlive = true;
 
     void Init();
-    void GenerateEntities(std::vector<Vector2> newChunksPosns);
+    void GenerateEntities(std::vector<Vector2> newChunksPosns, int level);
+    void SpawnEnemies(const TopCamera& camera, int level);
     void AttackDir(Vector2 dirposn, const TopCamera& camera);
     void PutResource(int count, ResourceType resourceType);
     void CheckCollisions(const TopCamera& camera);

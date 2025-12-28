@@ -56,14 +56,15 @@ void TopCamera::MotionCapture() {
         newPosn.x+=trueSpeed;
     }
 
-    posn = newPosn;
-    // Sample code for restricting movement to a 2 x 2 chunk area (comment above line)
-    /*if (
-        newPosn.x >= -TILE_SIZE * CHUNK_SIZE && newPosn.x <= TILE_SIZE * CHUNK_SIZE &&
-        newPosn.y >= -TILE_SIZE * CHUNK_SIZE && newPosn.y <= TILE_SIZE * CHUNK_SIZE
+    // posn = newPosn;
+    // Sample code for restricting movement to a borderSize x borderSize chunk area (comment above line)
+    const int borderSize = 16;
+    if (
+        newPosn.x >= -TILE_SIZE * CHUNK_SIZE * borderSize && newPosn.x <= TILE_SIZE * CHUNK_SIZE * borderSize &&
+        newPosn.y >= -TILE_SIZE * CHUNK_SIZE * borderSize && newPosn.y <= TILE_SIZE * CHUNK_SIZE * borderSize
     ) {
         posn = newPosn;
-    }*/
+    }
 }
 
 /**

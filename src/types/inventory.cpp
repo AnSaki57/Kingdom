@@ -25,7 +25,7 @@ void Inventory::Init(int rows_, int cols_, Vector2 posn_) {
 int Inventory::GetRows() const { return rows; }
 int Inventory::GetCols() const { return cols; }
 Vector2 Inventory::GetPosn() const { return posn; }
-Vector2 Inventory::GetPosn(int row, int col) const { return {posn.x+col*BOX_SIZE, posn.y+row*BOX_SIZE}; }
+Vector2 Inventory::GetPosn(int row, int col) const { return {float(posn.x+col*BOX_SIZE), float(posn.y+row*BOX_SIZE)}; }
 
 /**
  * @brief       Immutable getter for Resource in box
@@ -140,13 +140,13 @@ void Inventory::Draw(const TopCamera& camera) const {
     for (size_t row = 0; row < rows; row++) {
         for (size_t col = 0; col < cols; col++) {
             // Draw each box and its underlying Resource (if it exists)
-            Vector2 boxposn = {posn.x + col * BOX_SIZE, posn.y + row * BOX_SIZE};
+            Vector2 boxposn = {float(posn.x + col * BOX_SIZE), float(posn.y + row * BOX_SIZE)};
             DrawRectangleLinesEx (
                 {
                     boxposn.x-camera.posn.x, 
                     boxposn.y-camera.posn.y, 
-                    BOX_SIZE, 
-                    BOX_SIZE
+                    float(BOX_SIZE), 
+                    float(BOX_SIZE)
                 }, 
                 BOX_BORDER_WIDTH, 
                 BOX_EDGECOLOUR
