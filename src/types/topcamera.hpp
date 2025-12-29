@@ -2,7 +2,7 @@
 
 #include "raylib.h"
 #include "../constants.hpp"
-#define CAMERA_SPEED_MULTIPLIER 0.0
+#define CAMERA_SPEED_MULTIPLIER 10.0
 
 /**
  * Represents the top-view camera above the Player
@@ -18,7 +18,7 @@ public:
 
     Vector2 GetPosn() const;
 
-    void MotionCapture();
+    void MotionCapture(double borderSize);
     bool IsObjOnScreen(Rectangle objShape) const;
     bool IsObjOnScreen(std::pair<Vector2, double> objShape) const;
 };

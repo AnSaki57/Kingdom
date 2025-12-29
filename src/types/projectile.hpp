@@ -9,7 +9,7 @@
  */
 class Projectile : public MobileEntity {
     Vector2 velocity;
-    int lifetime = 40;    // TODO: Integrate this better
+    int lifetime = FRAMES_PER_SECOND * 1.5;    // TODO: Integrate this better
 
 public:
     Projectile(Vector2 posn_, Vector2 velocity_, double attackPower_);

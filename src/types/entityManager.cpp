@@ -16,12 +16,19 @@ void EntityManager::Init() {
     player->Init();
     entities.push_back(std::move(player));
     destroyQueue.resize(0);
+    countStats.resize(4, 0);
+}
+
+std::vector<int> EntityManager::GetCountStats() { 
+    countStats[0] = entities[0]->GetLevel();
+    return countStats; 
 }
 
 /**
  * @brief                   Generate entities on newly-generated Chunks
  * 
  * @param newChunksPosns    Location of newly generated Chunks
+ * @param level             Level of Entitys to generate (roughly)
  */
 void EntityManager::GenerateEntities(std::vector<Vector2> newChunksPosns, int level) {
     for (const auto& newChunkPosn : newChunksPosns) {
@@ -38,7 +45,9 @@ void EntityManager::GenerateEntities(std::vector<Vector2> newChunksPosns, int le
                 // Enemy generation
                 rand = random() % 1000000;
                 if (rand < 1500) {
-                    entities.push_back(std::make_unique<Enemy>(tilePosn, level));
+                    rand = random() % 10 - 4;   // Generate Entity levels +-5 from intended
+                    if (level+rand<1) rand = 1-level;
+                    entities.push_back(std::make_unique<Enemy>(tilePosn, level+rand));
                 }
             }
         }
@@ -70,7 +79,9 @@ void EntityManager::SpawnEnemies(const TopCamera& camera, int level) {
                     Vector2 tilePosn = {float(chunkPosn.x+TILE_SIZE*row), float(chunkPosn.y+TILE_SIZE*col)};
                     int rand = random() % 1000000;
                     if (rand < 1000) {
-                        entities.push_back(std::make_unique<Enemy>(tilePosn, level));
+                        rand = random() % 10 - 4;  // Generate Entity levels +-5 from intended
+                    if (level+rand<1) rand = 1-level;
+                        entities.push_back(std::make_unique<Enemy>(tilePosn, level+rand));
                     }
                 }
             }
@@ -139,7 +150,7 @@ void EntityManager::CheckCollisions(const TopCamera& camera) {
                             break;
                         case ENTITY_TYPE_ENEMY:
                             if (entities[j]->entityType==ENTITY_TYPE_PLAYER && entities[i]->CanAttack()) {
-                                entities[j]->entityUpdateStats.damage=entities[i]->GetAttackPower();
+                                entities[j]->entityUpdateStats.damage=entities[i]->GetAttackPower()*0.2;
                                 entities[i]->ResetAttackCooldown();
                             }
                         
@@ -152,7 +163,7 @@ void EntityManager::CheckCollisions(const TopCamera& camera) {
                             break;
                         case ENTITY_TYPE_ENEMY:
                             if (entities[i]->entityType==ENTITY_TYPE_PLAYER && entities[j]->CanAttack()) {
-                                entities[i]->entityUpdateStats.damage=entities[j]->GetAttackPower();
+                                entities[i]->entityUpdateStats.damage=entities[j]->GetAttackPower()*0.2;
                                 entities[j]->ResetAttackCooldown();
                             }
                         
@@ -234,9 +245,11 @@ std::vector<std::tuple<Vector2, int, ResourceType>> EntityManager::Update(const 
             // TODO: Automate this for every Entity
             returnResources.push_back(std::tuple<Vector2, int, ResourceType>(entities[destroyQueue[i]]->GetHitbox().first, 5, RESOURCE_TYPE_WOOD));
             player->SetXP(player->GetXP()+5);
+            countStats[COUNTSTAT_TREES_DESTROYED]++;
             break;
         case ENTITY_TYPE_ENEMY:
             player->SetXP(player->GetXP()+15);
+            countStats[COUNTSTAT_ENEMIES_KILLED]++;
             break;
         
         default:

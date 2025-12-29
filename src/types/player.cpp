@@ -14,8 +14,8 @@ Player::Player() : MobileEntity(ProgressBar({float(240), float(80), float(DEFAUL
     entityUpdateStats.damage = 0;
 
     // For testing only
-    /*xp = 3000;
-    level = 31;
+    /*xp = 4000;
+    level = 41;
     totalHP = currHP = BASE_ENTITY_HP * Utility::GetMultiplier(level);*/
 }
 
@@ -100,7 +100,10 @@ void Player::Draw(const TopCamera&) const {
     hpBar.Draw();
     xpBar.Draw();
     std::string levelText = "Level " + std::to_string(level);
-    DrawText(levelText.c_str(), 10, DEFAULT_MONITOR_HEIGHT-60, 25, BLACK);
+    double textLength = MeasureText(levelText.c_str(), 25);
+    DrawRectangle(DEFAULT_MONITOR_WIDTH/2-100, 100, 200, 65, YELLOW);
+    DrawRectangleLines(DEFAULT_MONITOR_WIDTH/2-100, 100, 200, 65, BLACK);
+    DrawText(levelText.c_str(), (DEFAULT_MONITOR_WIDTH-textLength)/2, 120, 25, BLACK);
     inventory.Draw();
 }
 

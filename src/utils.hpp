@@ -1,4 +1,6 @@
 #pragma once
+
+#include "raylib.h"
 #include <cmath>
 
 namespace Utility {
@@ -11,5 +13,12 @@ namespace Utility {
      */
     inline constexpr double GetMultiplier(int level) {
         return std::pow(BASE_LEVEL_MULTIPLIER, level);
+    }
+
+    inline Vector2 GetRandUnitDir() {
+        float rand1 = random() % 101 - 50;
+        float rand2 = random() % 101 - 50;
+        float magnitude = sqrt(rand1*rand1 + rand2*rand2);
+        return Vector2({rand1/magnitude, rand2/magnitude});
     }
 }

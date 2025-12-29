@@ -65,7 +65,7 @@ void Game::HandleEvents() {
     }
     
     if (gameState == GAME_STATE_RUNNING) {
-        camera.MotionCapture();
+        camera.MotionCapture(borderSize);
 
         // Pick up resources on left mouse click
         if (IsMouseButtonDown(MOUSE_BUTTON_LEFT)) {
@@ -93,11 +93,20 @@ void Game::Update() {
     UpdateMusicStream(introMusic);
     UpdateMusicStream(music);
 
-    int targetLevel = int(frameCount*15/(FRAMES_PER_SECOND*60*2));
-    if (targetLevel == 0) targetLevel = 1;
+    tilePosn.first = int((camera.GetPosn().x+GetScreenWidth()/2)/(TILE_SIZE));
+    tilePosn.second = int((camera.GetPosn().y+GetScreenWidth()/2)/(TILE_SIZE));
+    chunkPosn.first = int((camera.GetPosn().x+GetScreenWidth()/2)/(CHUNK_SIZE*TILE_SIZE));
+    chunkPosn.second = int((camera.GetPosn().y+GetScreenWidth()/2)/(CHUNK_SIZE*TILE_SIZE));
+    
+    if (int(frameCount) % int(FRAMES_PER_SECOND*60*2 / 8) == 0) {
+        worldLevel++;
+    }
 
-    std::vector<Vector2> newChunksPosns = worldMap.GenerateChunks(camera); // If enemies too hard, change this
-    entityManager.GenerateEntities(newChunksPosns, targetLevel);
+    std::vector<Vector2> newChunksPosns = worldMap.GenerateChunks(camera);
+
+    int distanceDifficultyOffset = 3 * std::max(std::abs(chunkPosn.first), std::abs(chunkPosn.second));
+    entityManager.GenerateEntities(newChunksPosns, worldLevel+distanceDifficultyOffset);
+
     entityManager.CheckCollisions(camera);
     std::vector<std::tuple<Vector2, int, ResourceType>> returnResources = entityManager.Update(camera);
     for (const auto& [posn, count, resourceType] : returnResources) {
@@ -113,8 +122,11 @@ void Game::Update() {
     }
 
     if (frameCount % int(FRAMES_PER_SECOND * 60) == 0) {
-        entityManager.SpawnEnemies(camera, targetLevel);
+        entityManager.SpawnEnemies(camera, worldLevel);
     }
+
+    if (borderSize<20)
+        borderSize += 0.001;
 }
 
 /**
@@ -128,7 +140,69 @@ void Game::Draw() {
     resourceManager.Draw(camera);
     entityManager.Draw(camera);
 
+    Color borderColour = RED;
+    if (int(frameCount/FRAMES_PER_SECOND)%2 == 0)
+        borderColour = YELLOW;
+    DrawRectangleLinesEx({
+        float(-TILE_SIZE*CHUNK_SIZE*borderSize-camera.GetPosn().x), 
+        float(-TILE_SIZE*CHUNK_SIZE*borderSize-camera.GetPosn().y), 
+        float(2*TILE_SIZE*CHUNK_SIZE*borderSize), 
+        float(2*TILE_SIZE*CHUNK_SIZE*borderSize)
+    }, 8, borderColour);
+
+    std::string TilePosn = "Tile coords [" 
+        + std::to_string(tilePosn.first) + ", "
+        + std::to_string(tilePosn.second) + "]";
+    DrawText(TilePosn.c_str(), 100, 100, 35, BLACK);
+    std::string ChunkPosn = "Chunk coords [" 
+        + std::to_string(chunkPosn.first) + ", "
+        + std::to_string(chunkPosn.second) + "]";
+    DrawText(ChunkPosn.c_str(), 100, 150, 35, BLACK);
+
+    if (gameState == GAME_STATE_OVER) {
+        DrawGameOver();
+    }
+
     EndDrawing();
+}
+
+/**
+ * @brief   Draws the "Game Over" screen after the player ends
+ */
+void Game::DrawGameOver() {
+    const int width = 2000;
+    const int height = 1200;
+    const int fontSize = 250;
+    DrawRectangle((GetScreenWidth()-width)/2, (GetScreenHeight()-height)/2, width, height, {230, 41, 0, 180});
+    const std::string gameOverText = "GAME OVER";
+    int textlen = MeasureText(gameOverText.c_str(), fontSize);
+    DrawText(gameOverText.c_str(), (GetScreenWidth()-textlen)/2, (GetScreenHeight()-fontSize)/2, fontSize, WHITE); 
+
+    // Add stats at the bottom
+    const int subtextFontSize = 70;
+    std::vector<int> countStats = entityManager.GetCountStats();
+    for (int i = 0; i < countStats.size(); i++) {
+        std::string text;
+        switch (i) {
+        case COUNTSTAT_PLAYER_LEVEL:
+            text = "Player Level: " + std::to_string(countStats[COUNTSTAT_PLAYER_LEVEL]);
+            break;
+        case COUNTSTAT_ENEMIES_KILLED:
+            text = "Enemies Killed: " + std::to_string(countStats[COUNTSTAT_ENEMIES_KILLED]);
+            break;
+        case COUNTSTAT_TREES_DESTROYED:
+            text = "Trees Decimated: " + std::to_string(countStats[COUNTSTAT_TREES_DESTROYED]);
+            break;
+        case COUNTSTAT_WOOD_COLLECTED:
+            text = "Wood Collected: " + std::to_string(countStats[COUNTSTAT_WOOD_COLLECTED]);
+            break;
+        
+        default:
+            break;
+        }
+
+        DrawText(text.c_str(), (GetScreenWidth()-width+subtextFontSize)/2, (GetScreenHeight()+fontSize+subtextFontSize)/2+i*(subtextFontSize*3)/2, subtextFontSize, WHITE);
+    }
 }
 
 /**
@@ -137,11 +211,8 @@ void Game::Draw() {
 void Game::Run() {
     while (!WindowShouldClose()) {
         HandleEvents();
-        if (gameState == GAME_STATE_OVER) {
-            break;
-        }
         Draw();
-        if (gameState == GAME_STATE_PAUSED) {
+        if (gameState == GAME_STATE_PAUSED || gameState == GAME_STATE_OVER) {
             continue;
         }
         Update();

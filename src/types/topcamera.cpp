@@ -23,7 +23,7 @@ Vector2 TopCamera::GetPosn() const { return posn; }
 /**
  * @brief   Captures movement keys for moving the camera around
 */
-void TopCamera::MotionCapture() {
+void TopCamera::MotionCapture(double borderSize) {
     Vector2 newPosn = posn;
     
     double speedMultiplier = 1.0;
@@ -58,10 +58,9 @@ void TopCamera::MotionCapture() {
 
     // posn = newPosn;
     // Sample code for restricting movement to a borderSize x borderSize chunk area (comment above line)
-    const int borderSize = 16;
     if (
-        newPosn.x >= -TILE_SIZE * CHUNK_SIZE * borderSize && newPosn.x <= TILE_SIZE * CHUNK_SIZE * borderSize &&
-        newPosn.y >= -TILE_SIZE * CHUNK_SIZE * borderSize && newPosn.y <= TILE_SIZE * CHUNK_SIZE * borderSize
+        newPosn.x >= -TILE_SIZE * CHUNK_SIZE * borderSize - GetScreenWidth()/2 && newPosn.x <= TILE_SIZE * CHUNK_SIZE * borderSize - GetScreenWidth()/2 &&
+        newPosn.y >= -TILE_SIZE * CHUNK_SIZE * borderSize - GetScreenHeight()/2 && newPosn.y <= TILE_SIZE * CHUNK_SIZE * borderSize - GetScreenHeight()/2
     ) {
         posn = newPosn;
     }

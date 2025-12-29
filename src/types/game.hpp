@@ -19,6 +19,10 @@ enum GameState {
  */
 class Game {
     int frameCount;
+    double borderSize = 1;
+    int worldLevel = 0;
+    std::pair<int, int> tilePosn, chunkPosn;
+
     Music introMusic, music;
     GameState gameState = GAME_STATE_PAUSED;
     WorldMap worldMap;
@@ -30,6 +34,7 @@ class Game {
     void HandleEvents();
     void Update();
     void Draw();
+    void DrawGameOver();
 
 public:
     Game();

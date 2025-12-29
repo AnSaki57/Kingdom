@@ -13,6 +13,7 @@
  *  - Actual calling of sprite (un)loaders by the Asset class
  */
 class Enemy : public MobileEntity {
+    Vector2 randDir = {0,0};
     static Texture2D sprite;
     static bool isTextureLoaded;
 
