@@ -1,4 +1,5 @@
 #include "entityManager.hpp"
+#include "fadeoutManager.hpp"
 #include "player.hpp"
 #include "enemy.hpp"
 #include "projectile.hpp"
@@ -6,7 +7,6 @@
 #include "tree.hpp"
 #include "../constants.hpp"
 #include "raymath.h"
-#include <iostream>
 
 /**
  * @brief   Initialises the player of the game
@@ -125,7 +125,7 @@ void EntityManager::PutResource(int count, ResourceType resourceType) {
  * 
  * @param camera    Context for what collisions matter (only those on-screen)
  */
-void EntityManager::CheckCollisions(const TopCamera& camera) {
+void EntityManager::CheckCollisions(const TopCamera& camera, FadeoutManager& fadeoutManager) {
     for (size_t i = 0; i < entities.size(); i++) {
         if (entities[i] && (entities[i]->followsCamera || camera.IsObjOnScreen(entities[i]->GetHitbox()))) {
             // Adjust position as based on whether the Entity follows the camera or not
@@ -133,15 +133,14 @@ void EntityManager::CheckCollisions(const TopCamera& camera) {
             if (entities[i]->followsCamera) posn1 = {posn1.x+camera.GetPosn().x, posn1.y+camera.GetPosn().y};
 
             for (size_t j = i+1; j < entities.size(); j++) {
+                auto [posn2, radius2] = entities[j]->GetHitbox();
+                if (entities[j]->followsCamera) posn2 = {posn2.x+camera.GetPosn().x, posn2.y+camera.GetPosn().y};
+
                 // Check if entities[i] and entities[j] collide with each other
                 if (
                     entities[j] && 
                     camera.IsObjOnScreen(entities[j]->GetHitbox()) && 
-                    CheckCollisionCircles (
-                        posn1, radius1, 
-                        entities[j]->GetHitbox().first, 
-                        entities[j]->GetHitbox().second
-                    )
+                    CheckCollisionCircles(posn1, radius1, posn2, radius2)
                 ) {
                     // Collision setup (i does what to j's state, and vice versa)
                     switch (entities[i]->entityType) {
@@ -151,6 +150,7 @@ void EntityManager::CheckCollisions(const TopCamera& camera) {
                         case ENTITY_TYPE_ENEMY:
                             if (entities[j]->entityType==ENTITY_TYPE_PLAYER && entities[i]->CanAttack()) {
                                 entities[j]->entityUpdateStats.damage=entities[i]->GetAttackPower()*0.2;
+                                fadeoutManager.PutMessage(FADEOUT_TYPE_PLAYER_DAMAGE,std::to_string(int(std::floor(entities[j]->entityUpdateStats.damage))), posn2);
                                 entities[i]->ResetAttackCooldown();
                             }
                         
@@ -164,6 +164,7 @@ void EntityManager::CheckCollisions(const TopCamera& camera) {
                         case ENTITY_TYPE_ENEMY:
                             if (entities[i]->entityType==ENTITY_TYPE_PLAYER && entities[j]->CanAttack()) {
                                 entities[i]->entityUpdateStats.damage=entities[j]->GetAttackPower()*0.2;
+                                fadeoutManager.PutMessage(FADEOUT_TYPE_PLAYER_DAMAGE,std::to_string(int(std::floor(entities[i]->entityUpdateStats.damage))), posn1);
                                 entities[j]->ResetAttackCooldown();
                             }
                         
@@ -203,9 +204,8 @@ void EntityManager::CheckCollisions(const TopCamera& camera) {
  * 
  * @param camera    Context for what Entitys to update
  */
-std::vector<std::tuple<Vector2, int, ResourceType>> EntityManager::Update(const TopCamera& camera) {
+std::vector<std::tuple<Vector2, int, ResourceType>> EntityManager::Update(const TopCamera& camera, FadeoutManager& fadeoutManager) {
     if (entities[0] && static_cast<Player*>(entities[0].get())->GetLiveness() == false) {
-        std::cout << RED_TEXT << "Player died at level " << entities[0]->GetLevel() << "\n" << RESET_TEXT;
         isPlayerAlive = false;
     }
 
@@ -245,10 +245,12 @@ std::vector<std::tuple<Vector2, int, ResourceType>> EntityManager::Update(const 
             // TODO: Automate this for every Entity
             returnResources.push_back(std::tuple<Vector2, int, ResourceType>(entities[destroyQueue[i]]->GetHitbox().first, 5, RESOURCE_TYPE_WOOD));
             player->SetXP(player->GetXP()+5);
+            fadeoutManager.PutMessage(FADEOUT_TYPE_XP, "5", {entities[destroyQueue[i]]->GetPosn()});
             countStats[COUNTSTAT_TREES_DESTROYED]++;
             break;
         case ENTITY_TYPE_ENEMY:
             player->SetXP(player->GetXP()+15);
+            fadeoutManager.PutMessage(FADEOUT_TYPE_XP, "15", {entities[destroyQueue[i]]->GetPosn()});
             countStats[COUNTSTAT_ENEMIES_KILLED]++;
             break;
         

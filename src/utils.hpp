@@ -15,6 +15,14 @@ namespace Utility {
         return std::pow(BASE_LEVEL_MULTIPLIER, level);
     }
 
+    /**
+     * @brief   Gets a random unit-length 2D vector
+     * 
+     * @returns 2D unit vector in a random direction
+     */
+    /**
+     * TODO: Make it proper
+     */
     inline Vector2 GetRandUnitDir() {
         float rand1 = random() % 101 - 50;
         float rand2 = random() % 101 - 50;

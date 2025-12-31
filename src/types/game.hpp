@@ -3,6 +3,7 @@
 #include "resourceManager.hpp"
 #include "topcamera.hpp"
 // #include "inventory.hpp"    // TODO: Delete this after incorporating into Entity objects
+#include "fadeoutManager.hpp"
 
 enum GameState {
     GAME_STATE_PAUSED,
@@ -28,6 +29,7 @@ class Game {
     WorldMap worldMap;
     ResourceManager resourceManager;
     EntityManager entityManager;
+    FadeoutManager fadeoutManager;
     TopCamera camera;
     // Inventory inventory;    // TODO: Delete this after incorporating into Entity objects
 

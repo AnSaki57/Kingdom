@@ -1,6 +1,6 @@
 #include "tile.hpp"
 
-#define BROWN_ {210, 70, 0, 255}
+#define BROWN_ {210, 90, 20, 255}
 #define LIGHT_BROWN_ {255, 170, 100, 255}
 
 /**

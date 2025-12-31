@@ -11,7 +11,7 @@
  */
 class Assets {
 public:
-    inline static Font sansSerifBold;
+    inline static Font gameFont;
 
     static void LoadAll();
     static void UnloadAll();

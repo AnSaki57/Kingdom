@@ -26,8 +26,6 @@ void Tree::LoadSprite() {
 
         if (!IsImageValid(imgsprite)) {
             std::cerr << "Tree img not found\n";
-        } else {
-            std::cout << YELLOW_TEXT << "Tree loaded successfully\n" << RESET_TEXT;
         }
         ImageCrop(&imgsprite, {90, 300, 300, 400});
         ImageResize(&imgsprite, TILE_SIZE, TILE_SIZE);

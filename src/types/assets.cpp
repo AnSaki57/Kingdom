@@ -4,15 +4,17 @@
 #include "resource.hpp"
 #include "tree.hpp"
 #include "wood.hpp"
+#include "fadeout.hpp"
 
 /**
  * @brief   Loads all assets, to be used before game starts and after window init
  */
 void Assets::LoadAll() {
     Enemy::LoadSprite();
-    sansSerifBold = LoadFont("SansSerifBold.ttf");
-    Entity::SetFont(sansSerifBold);
-    Resource::SetFont(sansSerifBold);
+    gameFont = LoadFont("SansSerifBold.ttf");
+    Entity::SetFont(gameFont);
+    Resource::SetFont(gameFont);
+    Fadeout::SetFont(gameFont);
     Tree::LoadSprite();
     Wood::LoadSprite();
 }
@@ -24,5 +26,5 @@ void Assets::UnloadAll() {
     Enemy::UnloadSprite();
     Tree::UnloadSprite();
     Wood::UnloadSprite();
-    UnloadFont(sansSerifBold);
+    UnloadFont(gameFont);
 }

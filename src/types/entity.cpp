@@ -11,6 +11,13 @@
 Entity::Entity(ProgressBar hpBar_) : hpBar(hpBar_) {}
 
 /**
+ * @brief   Getter for the position of the Entity
+ * 
+ * @returns The position of the Entity
+ */
+Vector2 Entity::GetPosn() { return posn; }
+
+/**
  * @brief   Getter for hitbox circle of the Entity
  * 
  * @returns Position, radius of hitbox circle

@@ -66,6 +66,7 @@ public:
 
     Entity(ProgressBar hpBar_);
 
+    Vector2 GetPosn();
     std::pair<Vector2, double> GetHitbox() const;
     double GetCurrHP();
     double GetTotalHP();

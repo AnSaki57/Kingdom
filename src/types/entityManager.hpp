@@ -4,6 +4,8 @@
 #include <memory>
 #include <tuple>
 
+class FadeoutManager;
+
 /**
  * Manages all the Entity objects in the game
  * 
@@ -27,8 +29,8 @@ public:
     void SpawnEnemies(const TopCamera& camera, int level);
     void AttackDir(Vector2 dirposn, const TopCamera& camera);
     void PutResource(int count, ResourceType resourceType);
-    void CheckCollisions(const TopCamera& camera);
-    std::vector<std::tuple<Vector2, int, ResourceType>> Update(const TopCamera& camera);
+    void CheckCollisions(const TopCamera& camera, FadeoutManager& fadeoutManager);
+    std::vector<std::tuple<Vector2, int, ResourceType>> Update(const TopCamera& camera, FadeoutManager& fadeoutManager);
     void Draw(const TopCamera& camera) const;
 };
 

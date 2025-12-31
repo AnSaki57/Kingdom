@@ -8,7 +8,7 @@
 /**
  * @brief   Initialises the Raylib window context
 */
-Game::Game() {
+Game::Game() /*: fadeout(60, 80)*/ {
 	srand(time(0));
 
     SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_HIGHDPI);
@@ -39,7 +39,9 @@ void Game::Init() {
 
     worldMap.Init();
     entityManager.Init();
+    fadeoutManager.Init();
     camera.Init();
+    // fadeout.Init("Sample message", PINK, {400, 400}, {10, -5});
 }
 
 /**
@@ -85,6 +87,13 @@ void Game::HandleEvents() {
  * @brief   Executes computations in a single frame
 */
 void Game::Update() {
+    // If Player is dead, end the game
+    if (!entityManager.isPlayerAlive) {
+        gameState = GAME_STATE_OVER;
+        return;
+    }
+
+    // Music system
     if (!IsMusicStreamPlaying(introMusic)) {
         if (!IsMusicStreamPlaying(music)) {
             PlayMusicStream(music);
@@ -92,23 +101,35 @@ void Game::Update() {
     }
     UpdateMusicStream(introMusic);
     UpdateMusicStream(music);
+    
+    // World level increments
+    if (int(frameCount) % int(FRAMES_PER_SECOND*15) == 0) {
+        worldLevel++;
+        if (worldLevel%5==0) {
+            std::string worldLevelMessage = "World Lvl " + std::to_string(worldLevel);
+            fadeoutManager.PutMessage(FADEOUT_TYPE_ANNOUNCEMENT, worldLevelMessage, camera.GetPosn());
+        }
+    }
 
+    // New Tile and Chunk positions
     tilePosn.first = int((camera.GetPosn().x+GetScreenWidth()/2)/(TILE_SIZE));
     tilePosn.second = int((camera.GetPosn().y+GetScreenWidth()/2)/(TILE_SIZE));
     chunkPosn.first = int((camera.GetPosn().x+GetScreenWidth()/2)/(CHUNK_SIZE*TILE_SIZE));
     chunkPosn.second = int((camera.GetPosn().y+GetScreenWidth()/2)/(CHUNK_SIZE*TILE_SIZE));
-    
-    if (int(frameCount) % int(FRAMES_PER_SECOND*60*2 / 8) == 0) {
-        worldLevel++;
-    }
 
+    // Generate new Chunks if the Player moves around
     std::vector<Vector2> newChunksPosns = worldMap.GenerateChunks(camera);
 
+    // Generate new Entities based on world level and Chunk position
     int distanceDifficultyOffset = 3 * std::max(std::abs(chunkPosn.first), std::abs(chunkPosn.second));
     entityManager.GenerateEntities(newChunksPosns, worldLevel+distanceDifficultyOffset);
 
-    entityManager.CheckCollisions(camera);
-    std::vector<std::tuple<Vector2, int, ResourceType>> returnResources = entityManager.Update(camera);
+    // Check for collisions, and report accordingly
+    entityManager.CheckCollisions(camera, fadeoutManager);
+    fadeoutManager.Update();
+
+    // Update entities, and get resources if any
+    std::vector<std::tuple<Vector2, int, ResourceType>> returnResources = entityManager.Update(camera, fadeoutManager);
     for (const auto& [posn, count, resourceType] : returnResources) {
         if (resourceType == RESOURCE_TYPE_NONE) {
             continue;
@@ -117,16 +138,14 @@ void Game::Update() {
         resourceManager.Append(appendPosn, count, resourceType);
     }
 
-    if (!entityManager.isPlayerAlive) {
-        gameState = GAME_STATE_OVER;
-    }
-
+    // Sporadically spawn more enemies
     if (frameCount % int(FRAMES_PER_SECOND * 60) == 0) {
         entityManager.SpawnEnemies(camera, worldLevel);
     }
 
+    // Expand world borders
     if (borderSize<20)
-        borderSize += 0.001;
+        borderSize += 0.0003;
 }
 
 /**
@@ -139,7 +158,9 @@ void Game::Draw() {
     worldMap.Draw(camera);
     resourceManager.Draw(camera);
     entityManager.Draw(camera);
+    fadeoutManager.Draw(camera);
 
+    // Draw the enclosing border
     Color borderColour = RED;
     if (int(frameCount/FRAMES_PER_SECOND)%2 == 0)
         borderColour = YELLOW;
@@ -150,6 +171,7 @@ void Game::Draw() {
         float(2*TILE_SIZE*CHUNK_SIZE*borderSize)
     }, 8, borderColour);
 
+    // Draw Chunk and Tile coordinates
     std::string TilePosn = "Tile coords [" 
         + std::to_string(tilePosn.first) + ", "
         + std::to_string(tilePosn.second) + "]";

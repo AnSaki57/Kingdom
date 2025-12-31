@@ -31,8 +31,6 @@ Enemy::Enemy(Vector2 posn_, int level_) : Enemy(posn_) {
     speed *= GetSpeedMult();
     totalHP *= GetHealthMult();
     currHP *= GetHealthMult();
-    // totalHP *= GetHealthMult();
-    // currHP *= GetHealthMult();
 }
 
 /**
@@ -60,8 +58,6 @@ void Enemy::UnloadSprite() {
 
 /**
  * @brief                   Updates the location of the Enemy based on where the Player is
- * 
- * [older version]@param entityUpdateStats Information wrapper for anything that a child of Entity may need for its Update function
  */
 void Enemy::Update() {
     // Unit vector in direction of Player
@@ -74,7 +70,7 @@ void Enemy::Update() {
     if (rand == 0) {
         randDir = Utility::GetRandUnitDir();
     }
-    Vector2 netMoveDir = {moveDir.x+randDir.x*0.35, moveDir.y+randDir.y*0.35};
+    Vector2 netMoveDir = {float(moveDir.x+randDir.x*0.35), float(moveDir.y+randDir.y*0.35)};
     len = Vector2Length(netMoveDir);
     netMoveDir = {float(netMoveDir.x/len), float(netMoveDir.y/len)};
 

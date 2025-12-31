@@ -17,8 +17,10 @@
     - -> WorldMap
     - -> EntityManager
     - -> ResourceManager
+    - -> FadeoutManager
     - -> TopCamera
 
+#### Mapping subsystem
 - WorldMap
     - -> Chunk
 
@@ -29,6 +31,10 @@
     - <- GrassTile
     - <- MudTile
     - <- SandTile
+
+#### Entity subsystem
+- EntityManager
+    - -> Entity
 
 - Entity
     - <- StationaryEntity
@@ -43,22 +49,24 @@
     - <- Projectile
     - <- Enemy
 
-- ResourceManager
-    - -> Resource
-
-- EntityManager
-    - -> Entity
-
 - Player
     - -> Inventory
 
 - Enemy
+
+#### Resource subsystem
+- ResourceManager
+    - -> Resource
 
 - Inventory
     - -> Resource
 
 - Resource
     - <- Wood
+
+#### Fadeout subsystem
+- FadeoutManager
+    - -> Fadeout
 
 ## Future ideas
 1. ~Resources, inventory system~
@@ -72,5 +80,5 @@
 9. Better map generation (Perlin noise? Wave function collapse?)
 
 ## Lines of code
-- No comments, no whitespaces:  1560 (using `cloc src/`)
-- With comments/whitespaces:    2649
+- No comments, no whitespaces:  1689 (using `cloc src/`)
+- With comments/whitespaces:    2954 (using `sed -n '$=' src/* src/types/*`)
